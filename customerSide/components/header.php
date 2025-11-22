@@ -1,0 +1,191 @@
+<?php
+session_start();
+require_once '../config.php';
+
+// Cache menu data to avoid repeated database queries
+$cache_file = '../cache/menu_cache.json';
+$cache_duration = 3600; // 1 hour cache
+
+// Function to get cached menu data
+function getCachedMenuData($cache_file, $cache_duration) {
+    if (file_exists($cache_file) && (time() - filemtime($cache_file)) < $cache_duration) {
+        $cached_data = file_get_contents($cache_file);
+        return json_decode($cached_data, true);
+    }
+    return false;
+}
+
+// Function to cache menu data
+function cacheMenuData($cache_file, $data) {
+    if (!is_dir(dirname($cache_file))) {
+        mkdir(dirname($cache_file), 0755, true);
+    }
+    file_put_contents($cache_file, json_encode($data));
+}
+
+// Get menu data from cache or database
+$menu_data = getCachedMenuData($cache_file, $cache_duration);
+
+if ($menu_data === false) {
+    // Cache expired or doesn't exist, query database
+    $sqlmainDishes = "SELECT * FROM menu WHERE item_category = 'Main Dishes' ORDER BY item_type";
+    $resultmainDishes = mysqli_query($link, $sqlmainDishes);
+    $mainDishes = $resultmainDishes ? mysqli_fetch_all($resultmainDishes, MYSQLI_ASSOC) : array();
+
+    $sqldrinks = "SELECT * FROM menu WHERE item_category = 'Drinks' ORDER BY item_type";
+    $resultdrinks = mysqli_query($link, $sqldrinks);
+    $drinks = $resultdrinks ? mysqli_fetch_all($resultdrinks, MYSQLI_ASSOC) : array();
+
+    $sqlsides = "SELECT * FROM menu WHERE item_category = 'Side Snacks' ORDER BY item_type";
+    $resultsides = mysqli_query($link, $sqlsides);
+    $sides = $resultsides ? mysqli_fetch_all($resultsides, MYSQLI_ASSOC) : array();
+
+    // Cache the data
+    $menu_data = [
+        'mainDishes' => $mainDishes,
+        'drinks' => $drinks,
+        'sides' => $sides
+    ];
+    cacheMenuData($cache_file, $menu_data);
+} else {
+    // Use cached data
+    $mainDishes = $menu_data['mainDishes'];
+    $drinks = $menu_data['drinks'];
+    $sides = $menu_data['sides'];
+}
+
+// Check if the user is logged in
+if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+    echo '<div class="user-profile">';
+    echo 'Welcome, ' . $_SESSION["member_name"] . '!';
+    echo '<a href="../customerProfile/profile.php">Profile</a>';
+    echo '</div>';
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <title>Home</title>
+</head>
+
+<body>
+    <!-- Header -->
+
+    <section id="header">
+        <div class="header container">
+            <div class="nav-bar">
+                <div class="brand">
+                    <a class="nav-link" href="../home/home.php#hero">
+                        <h1 class="text-center" style="font-family:Copperplate; color:whitesmoke;"> Migude Restaurant</h1><span
+                            class="sr-only"></span>
+                    </a>
+                </div>
+                <div class="nav-list">
+                    <div class="hamburger">
+                        <div class="bar"></div>
+                    </div>
+                    <div class="navbar-container">
+
+                        <div class="navbar">
+                            <ul>
+<?php
+$current_url = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+?>
+                                <li><a href="<?= strpos($current_url, "localhost/customerSide/home/home.php") !== false ? "#hero" : "../home/home.php#hero" ?>" data-after="Home">Home</a></li>
+<?php
+if (strpos($current_url, "localhost/customerSide/home/home.php") !== false) {
+?>
+                                <li><a href="#projects" data-after="Projects">Menu</a></li>
+                                <li><a href="#about" data-after="About">About</a></li>
+                                <li><a href="#contact" data-after="Contact">Contact</a></li>
+<?php
+} else {
+?>
+                                 <!--<li><a href="../CustomerReservation/reservePage.php"
+                                        data-after="Service">Reservation</a></li>-->
+                                <li><a href="../../adminSide/StaffLogin/login.php" data-after="Staff">Staff</a></li>
+<?php
+}
+?>
+
+                                <div class="dropdown">
+                                    <button class="dropbtn">ACCOUNT <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    </button>
+                                    <div class="dropdown-content">
+
+<?php
+
+// Get the member_id from the query parameters
+$account_id = $_SESSION['account_id'] ?? null;
+
+// Check if the user is logged in
+if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true && $account_id != null) {
+    // Only query user data if not already cached in session
+    if (!isset($_SESSION['user_data_cache']) || (time() - $_SESSION['user_data_cache_time']) > 300) { // 5 minute cache
+        $query = "SELECT member_name, points FROM memberships WHERE account_id = $account_id";
+        $result = mysqli_query($link, $query);
+        
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            if ($row) {
+                $_SESSION['user_data_cache'] = $row;
+                $_SESSION['user_data_cache_time'] = time();
+            }
+        }
+    }
+    
+    // Use cached user data
+    if (isset($_SESSION['user_data_cache'])) {
+        $member_name = $_SESSION['user_data_cache']['member_name'];
+        $points = $_SESSION['user_data_cache']['points'];
+        
+        // Calculate VIP status
+        $vip_status = ($points >= 1000) ? 'VIP' : 'Regular';
+        
+        // Define the VIP tooltip text
+        $vip_tooltip = ($vip_status === 'Regular') ? ($points < 1000 ? (1000 - $points) . ' points to VIP ' : 'You are eligible for VIP') : '';
+        
+        // Output the member's information
+        echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px; padding:5px; color:white; '>$member_name</p>";
+        echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px;padding:5px;color:white; '>$points Points </p>";
+        echo "<p class='logout-link' style='font-size:1.3em; margin-left:15px;padding:5px; color:white; '>$vip_status";
+        
+        // Add the tooltip only for Regular status
+        if ($vip_status === 'Regular') {
+            echo " <span class='tooltip'>$vip_tooltip</span>";
+        }
+        
+        echo "</p>";
+    } else {
+        echo "Member not found.";
+    }
+
+    echo '<a class="logout-link" style="color: white; font-size:1.3em;" href="../customerLogin/logout.php">Logout</a>';
+} else {
+    // If not logged in, show "Login" link
+    echo '<a class="signin-link" style="color: white; font-size:15px;" href="../customerLogin/register.php">Sign Up </a> ';
+    echo '<a class="login-link" style="color: white; font-size:15px; " href="../customerLogin/login.php">Log In</a>';
+}
+?>
+
+                                    </div>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End Header --> 
