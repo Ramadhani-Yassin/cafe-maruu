@@ -5,8 +5,13 @@ include '../inc/dashHeader.php';
 
 $bill_id = $_GET['bill_id'];
 $staff_id = $_GET['staff_id'];
-$member_id = $_GET['member_id'];
+$member_id = intval($_GET['member_id']);
 $reservation_id = $_GET['reservation_id'];
+$room_service_fee = isset($_GET['room_service_fee']) ? max(0, floatval($_GET['room_service_fee'])) : 0;
+$delivery_fee = isset($_GET['delivery_fee']) ? max(0, floatval($_GET['delivery_fee'])) : 0;
+
+$tax_rate = 0.18;
+$tip_rate = 0.10;
 ?>
 
 <style>
@@ -64,7 +69,6 @@ $reservation_id = $_GET['reservation_id'];
                                 ";
                                 $cart_result = mysqli_query($link, $cart_query);
                                 $cart_total = 0;
-                                $tax = 0.05;
 
                                 if ($cart_result && mysqli_num_rows($cart_result) > 0) {
                                     while ($cart_row = mysqli_fetch_assoc($cart_result)) {
@@ -90,17 +94,26 @@ $reservation_id = $_GET['reservation_id'];
                         </table>
                     </div>
                     <hr>
+                    <?php
+                        $tax_amount = $cart_total * $tax_rate;
+                        $tip_amount = $cart_total * $tip_rate;
+                        $GRANDTOTAL = $cart_total + $tax_amount + $tip_amount + $room_service_fee + $delivery_fee;
+                    ?>
                     <div class="text-right">
                         <?php 
-                        echo "<strong>Total:</strong> TZS " . number_format($cart_total, 2) . "<br>";
-                        echo "<strong>Tax (5%):</strong> TZS " . number_format($cart_total * $tax, 2) . "<br>";
-                        $GRANDTOTAL = $tax * $cart_total + $cart_total;
+                        echo "<strong>Subtotal:</strong> TZS " . number_format($cart_total, 2) . "<br>";
+                        echo "<strong>Tax (18%):</strong> TZS " . number_format($tax_amount, 2) . "<br>";
+                        echo "<strong>Tip (10%):</strong> TZS " . number_format($tip_amount, 2) . "<br>";
+                        echo "<strong>Room Services:</strong> TZS " . number_format($room_service_fee, 2) . "<br>";
+                        echo "<strong>Delivery Service:</strong> TZS " . number_format($delivery_fee, 2) . "<br>";
                         echo "<strong>Grand Total:</strong> TZS " . number_format($GRANDTOTAL, 2);
                         ?>
                     </div>
                     <!-- Pay Button -->
                     <div class="text-center mt-4">
                         <form id="payForm" method="post">
+                            <input type="hidden" name="room_service_fee" value="<?php echo $room_service_fee; ?>">
+                            <input type="hidden" name="delivery_fee" value="<?php echo $delivery_fee; ?>">
                             <button type="submit" name="pay_done" class="btn btn-dark">Print Receipt 🧾</button>
                         </form>
                     </div>
@@ -112,6 +125,8 @@ $reservation_id = $_GET['reservation_id'];
 
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pay_done'])) {
+    $room_service_fee = isset($_POST['room_service_fee']) ? max(0, floatval($_POST['room_service_fee'])) : $room_service_fee;
+    $delivery_fee = isset($_POST['delivery_fee']) ? max(0, floatval($_POST['delivery_fee'])) : $delivery_fee;
     // Check if the bill has already been paid
     $billCheckQuery = "SELECT payment_time FROM bills WHERE bill_id = $bill_id";
     $billCheckResult = $link->query($billCheckQuery);
@@ -129,16 +144,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pay_done'])) {
                     staff_id = $staff_id, member_id = $member_id, reservation_id = $reservation_id
                     WHERE bill_id = $bill_id;";
 
+    $tax_amount = $cart_total * $tax_rate;
+    $tip_amount = $cart_total * $tip_rate;
+    $GRANDTOTAL = $cart_total + $tax_amount + $tip_amount + $room_service_fee + $delivery_fee;
     $points = intval($GRANDTOTAL);
     if ($link->query($updateQuery) === TRUE) {
         // Record the payment in payment_records table
         $recordPaymentQuery = "INSERT INTO payment_records 
-                              (bill_id, payment_method, payment_amount, payment_time, staff_id, member_id, tax_amount)
-                              VALUES (?, ?, ?, ?, ?, ?, ?)";
+                              (bill_id, payment_method, payment_amount, payment_time, staff_id, member_id, tax_amount, tip_amount, delivery_fee, room_service_fee, tax_rate)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $link->prepare($recordPaymentQuery);
         $payment_method = 'card';
-        $tax_amount = $cart_total * $tax;
-        $stmt->bind_param("isdsiid", $bill_id, $payment_method, $GRANDTOTAL, $currentTime, $staff_id, $member_id, $tax_amount);
+        $stmt->bind_param(
+            "isdsiiddddd",
+            $bill_id,
+            $payment_method,
+            $GRANDTOTAL,
+            $currentTime,
+            $staff_id,
+            $member_id,
+            $tax_amount,
+            $tip_amount,
+            $delivery_fee,
+            $room_service_fee,
+            $tax_rate
+        );
         $stmt->execute();
 
         if (!empty($member_id)) {

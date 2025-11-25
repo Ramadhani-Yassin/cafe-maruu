@@ -118,6 +118,13 @@ function createNewBillRecord($table_id) {
         .cart-table th.action-col, .cart-table td.action-col { width: 52px; text-align: center; }
         .btn-icon { display: inline-flex; align-items: center; justify-content: center; padding: 6px 8px; line-height: 1; }
         .btn-icon svg { width: 16px; height: 16px; fill: currentColor; }
+        .addon-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+            background-color: #fafafa;
+        }
     
         /* Responsive adjustments */
         @media (max-width: 991.98px) {
@@ -332,18 +339,37 @@ function createNewBillRecord($table_id) {
                     </table>
                 </div>
 
-                <!-- Display Cart Total and Grand Total -->
+                <!-- Display Cart Total -->
                 <div style="margin-top: 20px;">
-                    <table class="table table-bordered">
+                    <table class="table table-bordered mb-0">
                         <tr>
                             <th>Cart Total</th>
                             <td>TZS <?= number_format($cart_total, 2) ?></td>
                         </tr>
                         <tr>
-                            <th>Grand Total</th>
-                            <td>TZS <?= number_format($cart_total, 2) ?></td>
+                            <th>Tip (10% auto)</th>
+                            <td>TZS <?= number_format($cart_total * 0.10, 2) ?></td>
+                        </tr>
+                        <tr>
+                            <th>Tax (18% auto)</th>
+                            <td>TZS <?= number_format($cart_total * 0.18, 2) ?></td>
                         </tr>
                     </table>
+                </div>
+
+                <div class="addon-card">
+                    <h5 class="mb-3">Optional Charges</h5>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="roomServiceAmount">Room Services (TZS)</label>
+                            <input type="number" min="0" step="0.01" id="roomServiceAmount" class="form-control" placeholder="0.00" value="0">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="deliveryAmount">Delivery Service (TZS)</label>
+                            <input type="number" min="0" step="0.01" id="deliveryAmount" class="form-control" placeholder="0.00" value="0">
+                        </div>
+                    </div>
+                    <small class="text-muted d-block">Tip (10%) and Tax (18%) are added automatically to every receipt.</small>
                 </div>
 
                 <?php
@@ -374,11 +400,11 @@ function createNewBillRecord($table_id) {
 
                 <!-- Payment Options Section -->
                 <div id="paymentOptionsSection" style="display: none; margin-top: 20px;">
-                    <div class="mt-3">
-                        <a href="posCashPayment.php?bill_id=<?= $bill_id ?>&staff_id=<?= $_SESSION['logged_account_id'] ?? 1 ?>&member_id=1&reservation_id=1120251" class="btn btn-success">Cash</a>
-                        <a href="posCardPayment.php?bill_id=<?= $bill_id ?>&staff_id=<?= $_SESSION['logged_account_id'] ?? 1 ?>&member_id=1&reservation_id=1120251" class="btn btn-primary ml-2">Card | Mobile</a>
-                        <a href="posCreditors.php?bill_id=<?= $bill_id ?>&staff_id=<?= $_SESSION['logged_account_id'] ?? 1 ?>&member_id=1&reservation_id=1120251" class="btn btn-creditors">Creditors</a>
-                        <a href="posCompo.php?bill_id=<?= $bill_id ?>&staff_id=<?= $_SESSION['logged_account_id'] ?? 1 ?>&member_id=1&reservation_id=1120251" class="btn btn-compo ml-2">Compo</a>
+                    <div class="mt-3 d-flex flex-wrap">
+                        <button type="button" class="btn btn-success mr-2 mb-2" onclick="launchPayment('cash')">Cash</button>
+                        <button type="button" class="btn btn-primary mr-2 mb-2" onclick="launchPayment('card')">Card | Mobile</button>
+                        <button type="button" class="btn btn-creditors mr-2 mb-2" onclick="launchPayment('creditor')">Creditors</button>
+                        <button type="button" class="btn btn-compo mb-2" onclick="launchPayment('compo')">Compo</button>
                     </div>
                 </div>
 
@@ -437,6 +463,48 @@ function createNewBillRecord($table_id) {
             }
         });
     });
+        const paymentContext = {
+            billId: '<?= $bill_id ?>',
+            staffId: '<?= $_SESSION['logged_account_id'] ?? 1 ?>',
+            memberId: '1',
+            reservationId: '1120251'
+        };
+
+        const endpoints = {
+            cash: 'posCashPayment.php',
+            card: 'posCardPayment.php',
+            creditor: 'posCreditors.php',
+            compo: 'posCompo.php'
+        };
+
+        function launchPayment(type) {
+            const roomInput = document.getElementById('roomServiceAmount');
+            const deliveryInput = document.getElementById('deliveryAmount');
+            const roomValue = parseFloat(roomInput.value) || 0;
+            const deliveryValue = parseFloat(deliveryInput.value) || 0;
+
+            if (roomValue < 0 || deliveryValue < 0) {
+                alert('Additional charges cannot be negative.');
+                return;
+            }
+
+            const endpoint = endpoints[type];
+            if (!endpoint) {
+                console.error('Unsupported payment type selected:', type);
+                return;
+            }
+
+            const params = new URLSearchParams({
+                bill_id: paymentContext.billId,
+                staff_id: paymentContext.staffId,
+                member_id: paymentContext.memberId,
+                reservation_id: paymentContext.reservationId,
+                room_service_fee: roomValue.toFixed(2),
+                delivery_fee: deliveryValue.toFixed(2)
+            });
+
+            window.location.href = `${endpoint}?${params.toString()}`;
+        }
     </script>
 </body>
 </html>

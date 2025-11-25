@@ -59,6 +59,26 @@ $items_query = "
 ";
 $items_result = mysqli_query($link, $items_query);
 
+// Fetch stored payment summary if available
+$payment_summary = [
+    'tax_amount' => 0,
+    'tip_amount' => 0,
+    'delivery_fee' => 0,
+    'room_service_fee' => 0,
+    'payment_amount' => null,
+    'tax_rate' => 0.18
+];
+$summary_query = "SELECT tax_amount, tip_amount, delivery_fee, room_service_fee, payment_amount, tax_rate 
+                  FROM payment_records 
+                  WHERE bill_id = '$bill_id' 
+                  ORDER BY payment_time DESC 
+                  LIMIT 1";
+$summary_result = mysqli_query($link, $summary_query);
+if ($summary_result && mysqli_num_rows($summary_result) > 0) {
+    $payment_summary = mysqli_fetch_assoc($summary_result);
+    $payment_summary['tax_rate'] = $payment_summary['tax_rate'] ?? 0.18;
+}
+
 // Initialize PDF for 80mm width
 $pdf = new FPDF('P', 'mm', array(80, 80));
 $pdf->AddPage();
@@ -149,26 +169,40 @@ if ($bill_data['payment_method'] !== 'compo') {
     $pdf->Cell(0, 1, str_repeat('-', 72), 0, 1);
     $pdf->SetFont('Arial', 'B', 8);
     
+    $stored_tax = floatval($payment_summary['tax_amount'] ?? 0);
+    $stored_tip = floatval($payment_summary['tip_amount'] ?? 0);
+    $stored_delivery = floatval($payment_summary['delivery_fee'] ?? 0);
+    $stored_room = floatval($payment_summary['room_service_fee'] ?? 0);
+    $computed_tax = $cart_total * floatval($payment_summary['tax_rate'] ?? 0.18);
+    $computed_tip = $cart_total * 0.10;
+    $tax_amount = $stored_tax > 0 ? $stored_tax : $computed_tax;
+    $tip_amount = $stored_tip > 0 ? $stored_tip : $computed_tip;
+    $room_fee = $stored_room;
+    $delivery_fee = $stored_delivery;
+    $grand_total = $payment_summary['payment_amount'] ?? ($cart_total + $tax_amount + $tip_amount + $room_fee + $delivery_fee);
+    
     $pdf->Cell(57, 5, 'SUBTOTAL:', 0);
     $pdf->Cell(15, 5, number_format($cart_total, 0), 0, 0, 'R');
     $pdf->Ln();
 
-    // Tax for card payments
-    if ($bill_data['payment_method'] === 'card') {
-        $tax_rate = 0.05;
-        $tax_amount = $cart_total * $tax_rate;
-        $grand_total = $cart_total + $tax_amount;
+    $pdf->Cell(57, 5, 'TAX (18%):', 0);
+    $pdf->Cell(15, 5, number_format($tax_amount, 0), 0, 0, 'R');
+    $pdf->Ln();
 
-        $pdf->Cell(57, 5, 'TAX (5%):', 0);
-        $pdf->Cell(15, 5, number_format($tax_amount, 0), 0, 0, 'R');
-        $pdf->Ln();
+    $pdf->Cell(57, 5, 'TIP (10%):', 0);
+    $pdf->Cell(15, 5, number_format($tip_amount, 0), 0, 0, 'R');
+    $pdf->Ln();
 
-        $pdf->Cell(57, 5, 'GRAND TOTAL:', 0);
-        $pdf->Cell(15, 5, number_format($grand_total, 0), 0, 0, 'R');
-    } else {
-        $pdf->Cell(57, 5, 'TOTAL:', 0);
-        $pdf->Cell(15, 5, number_format($cart_total, 0), 0, 0, 'R');
-    }
+    $pdf->Cell(57, 5, 'ROOM SERVICES:', 0);
+    $pdf->Cell(15, 5, number_format($room_fee, 0), 0, 0, 'R');
+    $pdf->Ln();
+
+    $pdf->Cell(57, 5, 'DELIVERY SERVICE:', 0);
+    $pdf->Cell(15, 5, number_format($delivery_fee, 0), 0, 0, 'R');
+    $pdf->Ln();
+
+    $pdf->Cell(57, 5, 'TOTAL:', 0);
+    $pdf->Cell(15, 5, number_format($grand_total, 0), 0, 0, 'R');
     $pdf->Ln();
 }
 
@@ -177,6 +211,11 @@ $pdf->Ln(2);
 $pdf->SetFont('Arial', 'I', 6);
 $pdf->Cell(0, 3, 'Thank you for dining with us!', 0, 1, 'C');
 $pdf->Cell(0, 3, date('Y'), 0, 1, 'C');
+$pdf->Ln(2);
+$pdf->SetFont('Arial', '', 7);
+$pdf->Cell(0, 4, 'Room Services: ____________________________', 0, 1, 'L');
+$pdf->Cell(0, 4, 'Delivery Service: __________________________', 0, 1, 'L');
+$pdf->Cell(0, 4, 'Customer Signature: ________________________', 0, 1, 'L');
 
 // Output PDF
 $pdf->Output('D', 'Receipt-'.$bill_id.'.pdf');

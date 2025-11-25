@@ -10,10 +10,13 @@ date_default_timezone_set('Africa/Dar_es_Salaam');
 
 // Function to get sales data
 function getSalesData($link, $period) {
-    $query = "SELECT 
+$query = "SELECT 
                 DATE(p.payment_time) as sale_date,
                 SUM(p.payment_amount) as total_sales,
                 SUM(p.tax_amount) as total_tax,
+                SUM(p.tip_amount) as total_tip,
+                SUM(p.room_service_fee) as total_room_service,
+                SUM(p.delivery_fee) as total_delivery,
                 COUNT(*) as transaction_count,
                 p.payment_method,
                 SUM(COALESCE(m.expense_amount * bi.quantity, 0)) + SUM(COALESCE(s.expense_per_unit * bi.quantity, 0)) as total_expenses
@@ -72,6 +75,9 @@ function getSalesData($link, $period) {
     $data = [];
     $grandTotal = 0;
     $grandTax = 0;
+    $grandTip = 0;
+    $grandRoom = 0;
+    $grandDelivery = 0;
     $totalTransactions = 0;
     $grandExpenses = 0;
     
@@ -79,6 +85,9 @@ function getSalesData($link, $period) {
         $data[] = $row;
         $grandTotal += $row['total_sales'];
         $grandTax += $row['total_tax'];
+        $grandTip += $row['total_tip'];
+        $grandRoom += $row['total_room_service'];
+        $grandDelivery += $row['total_delivery'];
         $totalTransactions += $row['transaction_count'];
         $grandExpenses += $row['total_expenses'];
     }
@@ -89,6 +98,9 @@ function getSalesData($link, $period) {
         'data' => $data,
         'grandTotal' => $grandTotal,
         'grandTax' => $grandTax,
+        'grandTip' => $grandTip,
+        'grandRoom' => $grandRoom,
+        'grandDelivery' => $grandDelivery,
         'totalTransactions' => $totalTransactions,
         'grandExpenses' => $grandExpenses,
         'grandProfit' => $grandProfit
@@ -288,6 +300,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
                         </div>
                     </div>
                     
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Tips Collected</h5>
+                                    <h2 class="card-text">TZS <?= number_format($salesData['grandTip'], 2) ?></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Room Services</h5>
+                                    <h2 class="card-text">TZS <?= number_format($salesData['grandRoom'], 2) ?></h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h5 class="card-title">Delivery Services</h5>
+                                    <h2 class="card-text">TZS <?= number_format($salesData['grandDelivery'], 2) ?></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- Additional Summary Row -->
                     <div class="row mb-4">
                         <div class="col-md-4">
@@ -327,6 +366,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
                                     <th>Payment Method</th>
                                     <th>Transactions</th>
                                     <th>Tax</th>
+                                    <th>Tip</th>
+                                    <th>Room</th>
+                                    <th>Delivery</th>
                                     <th>Expenses</th>
                                     <th>Total Sales</th>
                                     <th>Net Profit</th>
@@ -351,6 +393,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
                                             </td>
                                             <td><?= $row['transaction_count'] ?></td>
                                             <td>TZS <?= number_format($row['total_tax'], 2) ?></td>
+                                            <td>TZS <?= number_format($row['total_tip'], 2) ?></td>
+                                            <td>TZS <?= number_format($row['total_room_service'], 2) ?></td>
+                                            <td>TZS <?= number_format($row['total_delivery'], 2) ?></td>
                                             <td>TZS <?= number_format($row['total_expenses'], 2) ?></td>
                                             <td>TZS <?= number_format($row['total_sales'], 2) ?></td>
                                             <td class="<?= $rowProfit >= 0 ? 'text-success' : 'text-danger' ?>">

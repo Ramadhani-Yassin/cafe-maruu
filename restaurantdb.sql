@@ -589,12 +589,16 @@ INSERT INTO `menu` (`item_id`, `item_name`, `item_type`, `item_category`, `item_
 CREATE TABLE `payment_records` (
   `record_id` int(11) NOT NULL,
   `bill_id` int(11) NOT NULL,
-  `payment_method` enum('cash','card','mobile') NOT NULL,
+  `payment_method` enum('cash','card','mobile','creditor') NOT NULL,
   `payment_amount` decimal(10,2) NOT NULL,
   `payment_time` datetime NOT NULL,
   `staff_id` int(11) NOT NULL,
   `member_id` int(11) DEFAULT NULL,
-  `tax_amount` decimal(10,2) DEFAULT 0.00
+  `tax_amount` decimal(10,2) DEFAULT 0.00,
+  `tip_amount` decimal(10,2) DEFAULT 0.00,
+  `delivery_fee` decimal(10,2) DEFAULT 0.00,
+  `room_service_fee` decimal(10,2) DEFAULT 0.00,
+  `tax_rate` decimal(5,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --

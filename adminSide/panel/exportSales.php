@@ -11,10 +11,13 @@ require_once('../posBackend/fpdf186/fpdf.php');
 
 // Function to get sales data
 function getSalesData($link, $period) {
-    $query = "SELECT 
+$query = "SELECT 
                 DATE(payment_time) as sale_date,
                 SUM(payment_amount) as total_sales,
                 SUM(tax_amount) as total_tax,
+                SUM(tip_amount) as total_tip,
+                SUM(room_service_fee) as total_room_service,
+                SUM(delivery_fee) as total_delivery,
                 COUNT(*) as transaction_count,
                 payment_method
               FROM payment_records
@@ -68,12 +71,18 @@ function getSalesData($link, $period) {
     $data = [];
     $grandTotal = 0;
     $grandTax = 0;
+    $grandTip = 0;
+    $grandRoom = 0;
+    $grandDelivery = 0;
     $totalTransactions = 0;
     
     while ($row = $result->fetch_assoc()) {
         $data[] = $row;
         $grandTotal += $row['total_sales'];
         $grandTax += $row['total_tax'];
+        $grandTip += $row['total_tip'];
+        $grandRoom += $row['total_room_service'];
+        $grandDelivery += $row['total_delivery'];
         $totalTransactions += $row['transaction_count'];
     }
     
@@ -81,6 +90,9 @@ function getSalesData($link, $period) {
         'data' => $data,
         'grandTotal' => $grandTotal,
         'grandTax' => $grandTax,
+        'grandTip' => $grandTip,
+        'grandRoom' => $grandRoom,
+        'grandDelivery' => $grandDelivery,
         'totalTransactions' => $totalTransactions
     ];
 }
@@ -118,18 +130,24 @@ $pdf->Cell(0,10,$pdf->sanitizeText('Period: '.ucfirst($period)),0,1);
 $pdf->Ln(5);
 
 // Adjusted column widths for portrait orientation
-$col_width_date = 40;
-$col_width_method = 45;
-$col_width_transactions = 30;
-$col_width_tax = 35;
-$col_width_total = 40; // Total Sales column width
+$col_width_date = 30;
+$col_width_method = 28;
+$col_width_transactions = 18;
+$col_width_tax = 22;
+$col_width_tip = 22;
+$col_width_room = 22;
+$col_width_delivery = 22;
+$col_width_total = 28; // Total Sales column width
 
 // Create table header
 $pdf->SetFont('Arial','B',12);
 $pdf->Cell($col_width_date,10,'Date',1,0,'C');
 $pdf->Cell($col_width_method,10,'Payment Method',1,0,'C');
 $pdf->Cell($col_width_transactions,10,'Transactions',1,0,'C');
-$pdf->Cell($col_width_tax,10,'Tax (TZS)',1,0,'C');
+$pdf->Cell($col_width_tax,10,'Tax',1,0,'C');
+$pdf->Cell($col_width_tip,10,'Tip',1,0,'C');
+$pdf->Cell($col_width_room,10,'Room',1,0,'C');
+$pdf->Cell($col_width_delivery,10,'Delivery',1,0,'C');
 $pdf->Cell($col_width_total,10,'Total Sales (TZS)',1,1,'C');
 
 // Table data
@@ -142,21 +160,29 @@ if (empty($salesData['data'])) {
         $pdf->Cell($col_width_method,10,$pdf->sanitizeText(ucfirst($row['payment_method'])),1,0,'L');
         $pdf->Cell($col_width_transactions,10,$pdf->sanitizeText($row['transaction_count']),1,0,'C');
         $pdf->Cell($col_width_tax,10,$pdf->sanitizeText(number_format($row['total_tax'], 2)),1,0,'R');
+        $pdf->Cell($col_width_tip,10,$pdf->sanitizeText(number_format($row['total_tip'], 2)),1,0,'R');
+        $pdf->Cell($col_width_room,10,$pdf->sanitizeText(number_format($row['total_room_service'], 2)),1,0,'R');
+        $pdf->Cell($col_width_delivery,10,$pdf->sanitizeText(number_format($row['total_delivery'], 2)),1,0,'R');
         $pdf->Cell($col_width_total,10,$pdf->sanitizeText(number_format($row['total_sales'], 2)),1,1,'R');
     }
 }
 
-// Calculate the width for the "Total Tax" and "Grand Total" labels
-$label_width = $col_width_date + $col_width_method + $col_width_transactions;
-
-// Summary rows - properly aligned with Total Sales column
+// Summary rows - align under Total column
+$summary_label_width = $col_width_date + $col_width_method + $col_width_transactions + $col_width_tax + $col_width_tip + $col_width_room + $col_width_delivery;
 $pdf->SetFont('Arial','B',10);
-$pdf->Cell($label_width,10,'Total Tax:',1,0,'R');
-$pdf->Cell($col_width_tax,10,$pdf->sanitizeText(number_format($salesData['grandTax'], 2)),1,0,'R');
-$pdf->Cell($col_width_total,10,'',1,1,'R'); // Empty cell to maintain table structure
+$pdf->Cell($summary_label_width,10,'Total Tax:',1,0,'R');
+$pdf->Cell($col_width_total,10,$pdf->sanitizeText(number_format($salesData['grandTax'], 2)),1,1,'R');
 
-$pdf->Cell($label_width,10,'Grand Total:',1,0,'R');
-$pdf->Cell($col_width_tax,10,'',1,0,'R'); // Empty cell for tax column
+$pdf->Cell($summary_label_width,10,'Total Tips:',1,0,'R');
+$pdf->Cell($col_width_total,10,$pdf->sanitizeText(number_format($salesData['grandTip'], 2)),1,1,'R');
+
+$pdf->Cell($summary_label_width,10,'Room Services:',1,0,'R');
+$pdf->Cell($col_width_total,10,$pdf->sanitizeText(number_format($salesData['grandRoom'], 2)),1,1,'R');
+
+$pdf->Cell($summary_label_width,10,'Delivery Services:',1,0,'R');
+$pdf->Cell($col_width_total,10,$pdf->sanitizeText(number_format($salesData['grandDelivery'], 2)),1,1,'R');
+
+$pdf->Cell($summary_label_width,10,'Grand Total:',1,0,'R');
 $pdf->Cell($col_width_total,10,$pdf->sanitizeText(number_format($salesData['grandTotal'], 2)),1,1,'R');
 
 // Output the PDF
