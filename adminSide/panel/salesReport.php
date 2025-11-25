@@ -183,7 +183,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
 
     .table.report-table th,
     .table.report-table td {
-        white-space: nowrap;
+        white-space: normal;
+        word-break: break-word;
         font-size: 0.92rem;
         vertical-align: middle;
     }
@@ -245,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
         .input-group.ml-2 { width: 100%; margin-left: 0 !important; margin-top: 8px; }
         .report-table-wrapper { margin-top: 1rem; }
         .table.report-table th,
-        .table.report-table td { white-space: normal; font-size: 0.85rem; }
+        .table.report-table td { font-size: 0.85rem; }
     }
 </style>
 
@@ -378,8 +379,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
                             <thead>
                                 <tr>
                                     <th>Date</th>
-                                    <th>Payment Method</th>
-                                    <th>Transactions</th>
+                                    <th><span>Payment</span><br><span>Method</span></th>
+                                    <th><span>Trans</span><br><span>actions</span></th>
                                     <th>Tax</th>
                                     <th>Tip</th>
                                     <th>Room</th>
