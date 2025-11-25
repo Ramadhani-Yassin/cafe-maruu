@@ -7,7 +7,7 @@ session_start(); // Ensure session is started
 require_once "../config.php";
 
 // Define variables and initialize with empty values
-$name = $due_amount = $telephone = "";
+$name = $due_amount = $telephone = $nida = $passport = $voters_id = $driver_license = $tin_number = "";
 $name_err = $due_amount_err = $telephone_err = "";
 
 // Processing form data when form is submitted
@@ -35,23 +35,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $telephone = trim($_POST["telephone"]);
     }
 
+    // Get ID fields
+    $nida = !empty($_POST["nida"]) ? trim($_POST["nida"]) : NULL;
+    $passport = !empty($_POST["passport"]) ? trim($_POST["passport"]) : NULL;
+    $voters_id = !empty($_POST["voters_id"]) ? trim($_POST["voters_id"]) : NULL;
+    $driver_license = !empty($_POST["driver_license"]) ? trim($_POST["driver_license"]) : NULL;
+    $tin_number = !empty($_POST["tin_number"]) ? trim($_POST["tin_number"]) : NULL;
+
+    // Validate that at least one ID is provided
+    $has_personal_id = !empty($nida) || !empty($passport) || !empty($voters_id) || !empty($driver_license);
+    $has_tin = !empty($tin_number);
+    
+    if (!$has_personal_id && !$has_tin) {
+        $name_err = "Please provide at least one ID (NIDA, Passport, Voters ID, Driver License) OR TIN Number for companies.";
+    }
+
     // Check input errors before inserting into database
     if (empty($name_err) && empty($due_amount_err) && empty($telephone_err)) {
         // Get the current date and time
         $currentDate = date('Y-m-d H:i:s'); // Automatically set the current date and time
 
         // Prepare an insert statement
-        $sql = "INSERT INTO creditors (Name, Due_Amount, Date, Telephone) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO creditors (Name, Due_Amount, Date, Telephone, NIDA, Passport, VotersID, DriverLicense, TIN_Number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "sdss", $param_name, $param_due_amount, $param_date, $param_telephone);
+            mysqli_stmt_bind_param($stmt, "sdsssssss", $param_name, $param_due_amount, $param_date, $param_telephone, 
+                                   $param_nida, $param_passport, $param_voters, $param_driver, $param_tin);
 
             // Set parameters
             $param_name = $name;
             $param_due_amount = $due_amount;
             $param_date = $currentDate; // Automatically set the current date and time
             $param_telephone = $telephone;
+            $param_nida = $nida;
+            $param_passport = $passport;
+            $param_voters = $voters_id;
+            $param_driver = $driver_license;
+            $param_tin = $tin_number;
 
             // Attempt to execute the prepared statement
             if (mysqli_stmt_execute($stmt)) {
@@ -103,6 +124,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="telephone">Telephone:</label>
             <input type="text" name="telephone" id="telephone" class="form-control <?php echo (!empty($telephone_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $telephone; ?>" placeholder="Enter telephone number">
             <span class="invalid-feedback"><?php echo $telephone_err; ?></span>
+        </div>
+        <br>
+        
+        <h5 class="mt-4 mb-3">Creditor Identification <span class="text-danger">*</span></h5>
+        <p class="text-muted small">Fill at least ONE Personal ID (NIDA, Passport, Voters, Driver) OR TIN Number for Companies</p>
+        
+        <h6 class="mt-3">Personal ID Documents (Choose One):</h6>
+        <!-- NIDA -->
+        <div class="form-group">
+            <label for="nida">NIDA Number:</label>
+            <input type="text" name="nida" id="nida" class="form-control" value="<?php echo $nida; ?>" placeholder="Enter NIDA number">
+        </div>
+        <br>
+        <!-- Passport -->
+        <div class="form-group">
+            <label for="passport">Passport Number:</label>
+            <input type="text" name="passport" id="passport" class="form-control" value="<?php echo $passport; ?>" placeholder="Enter passport number">
+        </div>
+        <br>
+        <!-- Voters ID -->
+        <div class="form-group">
+            <label for="voters_id">Voters ID:</label>
+            <input type="text" name="voters_id" id="voters_id" class="form-control" value="<?php echo $voters_id; ?>" placeholder="Enter voters ID">
+        </div>
+        <br>
+        <!-- Driver License -->
+        <div class="form-group">
+            <label for="driver_license">Driver License:</label>
+            <input type="text" name="driver_license" id="driver_license" class="form-control" value="<?php echo $driver_license; ?>" placeholder="Enter driver license">
+        </div>
+        <br>
+        
+        <h6 class="mt-3">OR for Companies:</h6>
+        <!-- TIN Number -->
+        <div class="form-group">
+            <label for="tin_number">TIN Number:</label>
+            <input type="text" name="tin_number" id="tin_number" class="form-control" value="<?php echo $tin_number; ?>" placeholder="Enter TIN number for companies">
         </div>
         <br>
         <!-- Submit Button -->

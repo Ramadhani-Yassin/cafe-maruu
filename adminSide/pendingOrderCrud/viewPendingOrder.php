@@ -368,8 +368,11 @@ if (isset($_POST['pay_bill'])) {
 
                 <!-- Pay Bill Button and Payment Options -->
                 <?php if (!$has_payment_time && mysqli_num_rows($items_result) > 0): ?>
-                    <div style="margin-top: 20px;">
+                    <div style="margin-top: 20px;" class="d-flex justify-content-between flex-wrap">
                         <button type="button" class="btn btn-success" id="payBillButton" onclick="payBill()">Pay Bill</button>
+                        <?php if ($bill_id > 0): ?>
+                            <a href="../posBackend/orderNote.php?bill_id=<?= $bill_id ?>" class="btn btn-info" id="orderNoteButton" target="_blank">Order Note</a>
+                        <?php endif; ?>
                     </div>
 
                     <div id="paymentOptionsSection" style="display: none; margin-top: 20px;">
@@ -382,7 +385,7 @@ if (isset($_POST['pay_bill'])) {
                     </div>
                 <?php elseif ($has_payment_time): ?>
                     <div style="margin-top: 20px;">
-                        <a href="receipt.php?bill_id=<?= $bill_id ?>" class="btn btn-light">Print Receipt <span class="fa fa-receipt text-black"></span></a>
+                        <a href="../posBackend/receipt.php?bill_id=<?= $bill_id ?>" class="btn btn-light">Print Receipt <span class="fa fa-receipt text-black"></span></a>
                     </div>
                 <?php endif; ?>
             </div>
@@ -417,6 +420,8 @@ if (isset($_POST['pay_bill'])) {
     // Pay Bill functionality
     function payBill() {
         document.getElementById('payBillButton').style.display = 'none';
+        const orderNoteBtn = document.getElementById('orderNoteButton');
+        if (orderNoteBtn) orderNoteBtn.style.display = 'none';
         document.getElementById('paymentOptionsSection').style.display = 'block';
     }
 

@@ -7,32 +7,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST["name"];
     $due_amount = $_POST["due_amount"];
     $telephone = $_POST["telephone"];
+    $nida = !empty($_POST["nida"]) ? $_POST["nida"] : NULL;
+    $passport = !empty($_POST["passport"]) ? $_POST["passport"] : NULL;
+    $voters_id = !empty($_POST["voters_id"]) ? $_POST["voters_id"] : NULL;
+    $driver_license = !empty($_POST["driver_license"]) ? $_POST["driver_license"] : NULL;
+    $tin_number = !empty($_POST["tin_number"]) ? $_POST["tin_number"] : NULL;
     $conn = $link;
 
     // Automatically set the current date and time
     $currentDate = date('Y-m-d H:i:s');
 
-    // Prepare the SQL query to check if the creditor already exists (optional)
-    $check_query = "SELECT ID FROM creditors WHERE Name = ? AND Telephone = ?";
-    $check_stmt = $conn->prepare($check_query);
-    $check_stmt->bind_param("ss", $name, $telephone);
-    $check_stmt->execute();
-    $check_result = $check_stmt->get_result();
-
-    // Check if the creditor already exists (optional)
-    if ($check_result->num_rows > 0) {
-        $message = "A creditor with the same name and telephone already exists.<br>Please try again with different details.";
+    // Validate that at least one ID is provided
+    $has_personal_id = !empty($nida) || !empty($passport) || !empty($voters_id) || !empty($driver_license);
+    $has_tin = !empty($tin_number);
+    
+    if (!$has_personal_id && !$has_tin) {
+        $message = "Please provide at least one ID (NIDA, Passport, Voters ID, Driver License) OR TIN Number for companies.";
         $iconClass = "fa-times-circle";
         $cardClass = "alert-danger";
-        $bgColor = "#FFA7A7"; // Custom background color for error
+        $bgColor = "#FFA7A7";
     } else {
+        // Prepare the SQL query to check if the creditor already exists (optional)
+        $check_query = "SELECT ID FROM creditors WHERE Name = ? AND Telephone = ?";
+        $check_stmt = $conn->prepare($check_query);
+        $check_stmt->bind_param("ss", $name, $telephone);
+        $check_stmt->execute();
+        $check_result = $check_stmt->get_result();
+
+        // Check if the creditor already exists (optional)
+        if ($check_result->num_rows > 0) {
+            $message = "A creditor with the same name and telephone already exists.<br>Please try again with different details.";
+            $iconClass = "fa-times-circle";
+            $cardClass = "alert-danger";
+            $bgColor = "#FFA7A7"; // Custom background color for error
+        } else {
         // Prepare the SQL query for insertion
-        $insert_query = "INSERT INTO creditors (Name, Due_Amount, Date, Telephone) 
-                        VALUES (?, ?, ?, ?)";
+        $insert_query = "INSERT INTO creditors (Name, Due_Amount, Date, Telephone, NIDA, Passport, VotersID, DriverLicense, TIN_Number) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($insert_query);
 
         // Bind the parameters
-        $stmt->bind_param("sdss", $name, $due_amount, $currentDate, $telephone);
+        $stmt->bind_param("sdsssssss", $name, $due_amount, $currentDate, $telephone, $nida, $passport, $voters_id, $driver_license, $tin_number);
 
         // Execute the query
         if ($stmt->execute()) {
@@ -47,12 +62,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $bgColor = "#FFA7A7"; // Custom background color for error
         }
 
-        // Close the prepared statement
-        $stmt->close();
-    }
+            // Close the prepared statement
+            $stmt->close();
+        }
 
-    // Close the check statement and the connection
-    $check_stmt->close();
+        // Close the check statement
+        $check_stmt->close();
+    }
+    
+    // Close the connection
     $conn->close();
 }
 ?>

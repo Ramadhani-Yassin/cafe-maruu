@@ -6,7 +6,7 @@ session_start(); // Ensure session is started
 require_once "../config.php";
 
 // Initialize variables for form validation and creditor data
-$id = $name = $due_amount = $telephone = "";
+$id = $name = $due_amount = $telephone = $nida = $passport = $voters_id = $driver_license = $tin_number = "";
 $id_err = "";
 
 // Check if ID is provided in the URL
@@ -28,6 +28,11 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
                 $name = $row['Name'];
                 $due_amount = $row['Due_Amount'];
                 $telephone = $row['Telephone'];
+                $nida = $row['NIDA'] ?? '';
+                $passport = $row['Passport'] ?? '';
+                $voters_id = $row['VotersID'] ?? '';
+                $driver_license = $row['DriverLicense'] ?? '';
+                $tin_number = $row['TIN_Number'] ?? '';
             } else {
                 echo "Creditor not found.";
                 exit();
@@ -45,16 +50,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = trim($_POST["name"]);
     $due_amount = floatval($_POST["due_amount"]); // Convert to float
     $telephone = trim($_POST["telephone"]);
+    $nida = !empty($_POST["nida"]) ? trim($_POST["nida"]) : NULL;
+    $passport = !empty($_POST["passport"]) ? trim($_POST["passport"]) : NULL;
+    $voters_id = !empty($_POST["voters_id"]) ? trim($_POST["voters_id"]) : NULL;
+    $driver_license = !empty($_POST["driver_license"]) ? trim($_POST["driver_license"]) : NULL;
+    $tin_number = !empty($_POST["tin_number"]) ? trim($_POST["tin_number"]) : NULL;
+
+    // Validate that at least one ID is provided
+    $has_personal_id = !empty($nida) || !empty($passport) || !empty($voters_id) || !empty($driver_license);
+    $has_tin = !empty($tin_number);
+    
+    if (!$has_personal_id && !$has_tin) {
+        echo '<script>alert("Please provide at least one ID (NIDA, Passport, Voters ID, Driver License) OR TIN Number for companies."); window.history.back();</script>';
+        exit();
+    }
 
     // Automatically set the current date and time
     $currentDate = date('Y-m-d H:i:s');
 
-    // Update the creditor in the database
-    $update_sql = "UPDATE creditors SET Name='$name', Due_Amount='$due_amount', Date='$currentDate', Telephone='$telephone' WHERE ID='$id'";
-    $resultCreditor = mysqli_query($link, $update_sql);
+    // Update the creditor in the database using prepared statement
+    $update_sql = "UPDATE creditors SET Name=?, Due_Amount=?, Date=?, Telephone=?, NIDA=?, Passport=?, VotersID=?, DriverLicense=?, TIN_Number=? WHERE ID=?";
+    $stmt = mysqli_prepare($link, $update_sql);
+    mysqli_stmt_bind_param($stmt, "sdssssssi", $name, $due_amount, $currentDate, $telephone, $nida, $passport, $voters_id, $driver_license, $tin_number, $id);
+    $resultCreditor = mysqli_stmt_execute($stmt);
     
     if ($resultCreditor) {
         // Creditor updated successfully
+        mysqli_stmt_close($stmt);
         header("Location: ../panel/creditors-panel.php");
         exit();
     } else {
@@ -110,6 +132,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="form-group">
                         <label for="telephone" class="form-label">Telephone:</label>
                         <input type="text" name="telephone" id="telephone" class="form-control" placeholder="Enter telephone number" value="<?php echo htmlspecialchars($telephone); ?>" required>
+                    </div>
+
+                    <h5 class="mt-4 mb-3" style="color: white;">Creditor Identification <span class="text-danger">*</span></h5>
+                    <p style="color: #ccc; font-size: 0.9em;">Fill at least ONE Personal ID (NIDA, Passport, Voters, Driver) OR TIN Number for Companies</p>
+                    
+                    <h6 style="color: white; margin-top: 15px;">Personal ID Documents (Choose One):</h6>
+                    <!-- NIDA -->
+                    <div class="form-group">
+                        <label for="nida" class="form-label">NIDA Number:</label>
+                        <input type="text" name="nida" id="nida" class="form-control" placeholder="Enter NIDA number" value="<?php echo htmlspecialchars($nida); ?>">
+                    </div>
+
+                    <!-- Passport -->
+                    <div class="form-group">
+                        <label for="passport" class="form-label">Passport Number:</label>
+                        <input type="text" name="passport" id="passport" class="form-control" placeholder="Enter passport number" value="<?php echo htmlspecialchars($passport); ?>">
+                    </div>
+
+                    <!-- Voters ID -->
+                    <div class="form-group">
+                        <label for="voters_id" class="form-label">Voters ID:</label>
+                        <input type="text" name="voters_id" id="voters_id" class="form-control" placeholder="Enter voters ID" value="<?php echo htmlspecialchars($voters_id); ?>">
+                    </div>
+
+                    <!-- Driver License -->
+                    <div class="form-group">
+                        <label for="driver_license" class="form-label">Driver License:</label>
+                        <input type="text" name="driver_license" id="driver_license" class="form-control" placeholder="Enter driver license" value="<?php echo htmlspecialchars($driver_license); ?>">
+                    </div>
+
+                    <h6 style="color: white; margin-top: 15px;">OR for Companies:</h6>
+                    <!-- TIN Number -->
+                    <div class="form-group">
+                        <label for="tin_number" class="form-label">TIN Number:</label>
+                        <input type="text" name="tin_number" id="tin_number" class="form-control" placeholder="Enter TIN number for companies" value="<?php echo htmlspecialchars($tin_number); ?>">
                     </div>
 
                     <!-- Hidden ID Field -->

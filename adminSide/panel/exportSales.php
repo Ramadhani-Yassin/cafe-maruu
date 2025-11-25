@@ -143,7 +143,7 @@ $col_width_total = 32; // Total Sales column width
 $pdf->SetFont('Arial','B',10);
 $pdf->Cell($col_width_date,10,'Date',1,0,'C');
 $pdf->Cell($col_width_method,10,'Method',1,0,'C');
-$pdf->Cell($col_width_transactions,10,'Transactions',1,0,'C');
+$pdf->Cell($col_width_transactions,10,'Tr. Count',1,0,'C');
 $pdf->Cell($col_width_tax,10,'Tax',1,0,'C');
 $pdf->Cell($col_width_tip,10,'Tip',1,0,'C');
 $pdf->Cell($col_width_room,10,'Room',1,0,'C');

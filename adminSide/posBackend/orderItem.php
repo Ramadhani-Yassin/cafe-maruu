@@ -391,8 +391,11 @@ function createNewBillRecord($table_id) {
                     echo '<div>';
                     echo '<a href="receipt.php?bill_id=' . $bill_id . '" class="btn btn-light">Print Receipt <span class="fa fa-receipt text-black"></span></a></div>';
                 } elseif ($cart_total > 0) {
-                    // Display the "Pay Bill" button
+                    // Display the "Pay Bill" and "Order Note" buttons
+                    echo '<div class="d-flex justify-content-between flex-wrap" style="margin-top: 20px;">';
                     echo '<button type="button" class="btn btn-success" id="payBillButton" onclick="payBill()">Pay Bill</button>';
+                    echo '<a href="orderNote.php?bill_id=' . $bill_id . '" class="btn btn-info" id="orderNoteButton" target="_blank">Order Note</a>';
+                    echo '</div>';
                 } else {
                     echo '<h3>Add Item To Cart to Proceed</h3>';
                 }
@@ -436,8 +439,9 @@ function createNewBillRecord($table_id) {
     }
 
     function payBill() {
-        // Hide the "Pay Bill" button
+        // Hide the "Pay Bill" and "Order Note" buttons
         document.getElementById('payBillButton').style.display = 'none';
+        document.getElementById('orderNoteButton').style.display = 'none';
 
         // Show the payment options section
         document.getElementById('paymentOptionsSection').style.display = 'block';

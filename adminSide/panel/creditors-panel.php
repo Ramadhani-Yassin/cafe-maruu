@@ -68,6 +68,11 @@ require_once '../posBackend/checkIfLoggedIn.php';
                         echo "<th>Due Amount</th>";
                         echo "<th>Date</th>";
                         echo "<th>Telephone</th>";
+                        echo "<th>NIDA</th>";
+                        echo "<th>Passport</th>";
+                        echo "<th>Voters ID</th>";
+                        echo "<th>Driver License</th>";
+                        echo "<th>TIN Number</th>";
                         echo "<th>Edit</th>";
                         echo "</tr>";
                         echo "</thead>";
@@ -79,6 +84,11 @@ require_once '../posBackend/checkIfLoggedIn.php';
                             echo "<td>" . $row['Due_Amount'] . "</td>";
                             echo "<td>" . $row['Date'] . "</td>";
                             echo "<td>" . $row['Telephone'] . "</td>";
+                            echo "<td>" . (!empty($row['NIDA']) ? $row['NIDA'] : '-') . "</td>";
+                            echo "<td>" . (!empty($row['Passport']) ? $row['Passport'] : '-') . "</td>";
+                            echo "<td>" . (!empty($row['VotersID']) ? $row['VotersID'] : '-') . "</td>";
+                            echo "<td>" . (!empty($row['DriverLicense']) ? $row['DriverLicense'] : '-') . "</td>";
+                            echo "<td>" . (!empty($row['TIN_Number']) ? $row['TIN_Number'] : '-') . "</td>";
                             echo "<td>";
                             // Modify link with the pencil icon
                             echo '<a href="../creditorCrud/updateCreditorVerify.php?id='. $row['ID'] .'" title="Modify Record" data-toggle="tooltip"'
