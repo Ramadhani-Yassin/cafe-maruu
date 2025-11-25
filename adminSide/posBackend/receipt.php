@@ -213,8 +213,6 @@ $pdf->Cell(0, 3, 'Thank you for dining with us!', 0, 1, 'C');
 $pdf->Cell(0, 3, date('Y'), 0, 1, 'C');
 $pdf->Ln(2);
 $pdf->SetFont('Arial', '', 7);
-$pdf->Cell(0, 4, 'Room Services: ____________________________', 0, 1, 'L');
-$pdf->Cell(0, 4, 'Delivery Service: __________________________', 0, 1, 'L');
 $pdf->Cell(0, 4, 'Customer Signature: ________________________', 0, 1, 'L');
 
 // Output PDF

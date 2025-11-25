@@ -174,6 +174,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
     .table {
         border: 1px solid #ddd;
     }
+
+    .report-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table.report-table th,
+    .table.report-table td {
+        white-space: nowrap;
+        font-size: 0.92rem;
+        vertical-align: middle;
+    }
     
     .table thead th {
         background-color: #f8f9fa;
@@ -230,7 +243,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
         .report-container { padding-left: 16px; padding-right: 16px; margin-top: 5rem; }
         .period-selector .btn { width: 100%; text-align: center; }
         .input-group.ml-2 { width: 100%; margin-left: 0 !important; margin-top: 8px; }
-        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .report-table-wrapper { margin-top: 1rem; }
+        .table.report-table th,
+        .table.report-table td { white-space: normal; font-size: 0.85rem; }
     }
 </style>
 
@@ -358,8 +373,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
                     </div>
                     
                     <!-- Detailed Report Table -->
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-striped">
+                    <div class="report-table-wrapper">
+                        <table class="table table-bordered table-striped report-table">
                             <thead>
                                 <tr>
                                     <th>Date</th>

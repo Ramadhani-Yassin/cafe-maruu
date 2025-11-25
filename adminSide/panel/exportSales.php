@@ -130,14 +130,14 @@ $pdf->Cell(0,10,$pdf->sanitizeText('Period: '.ucfirst($period)),0,1);
 $pdf->Ln(5);
 
 // Adjusted column widths for portrait orientation
-$col_width_date = 30;
-$col_width_method = 28;
+$col_width_date = 26;
+$col_width_method = 24;
 $col_width_transactions = 18;
-$col_width_tax = 22;
-$col_width_tip = 22;
-$col_width_room = 22;
-$col_width_delivery = 22;
-$col_width_total = 28; // Total Sales column width
+$col_width_tax = 20;
+$col_width_tip = 20;
+$col_width_room = 20;
+$col_width_delivery = 20;
+$col_width_total = 32; // Total Sales column width
 
 // Create table header
 $pdf->SetFont('Arial','B',12);
@@ -152,9 +152,9 @@ $pdf->Cell($col_width_total,10,'Total Sales (TZS)',1,1,'C');
 
 // Table data
 if (empty($salesData['data'])) {
-    $pdf->Cell(0,10,'No sales data available for this period',0,1,'C');
+    $pdf->Cell(0,10,$pdf->sanitizeText('No sales data available for this period'),0,1,'C');
 } else {
-    $pdf->SetFont('Arial','',10);
+    $pdf->SetFont('Arial','',9);
     foreach ($salesData['data'] as $row) {
         $pdf->Cell($col_width_date,10,$pdf->sanitizeText(date('M j, Y', strtotime($row['sale_date']))),1,0,'L');
         $pdf->Cell($col_width_method,10,$pdf->sanitizeText(ucfirst($row['payment_method'])),1,0,'L');
