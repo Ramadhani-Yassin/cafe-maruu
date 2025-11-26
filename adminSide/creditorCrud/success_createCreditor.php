@@ -27,20 +27,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cardClass = "alert-danger";
         $bgColor = "#FFA7A7";
     } else {
-        // Prepare the SQL query to check if the creditor already exists (optional)
-        $check_query = "SELECT ID FROM creditors WHERE Name = ? AND Telephone = ?";
-        $check_stmt = $conn->prepare($check_query);
-        $check_stmt->bind_param("ss", $name, $telephone);
-        $check_stmt->execute();
-        $check_result = $check_stmt->get_result();
+    // Prepare the SQL query to check if the creditor already exists (optional)
+    $check_query = "SELECT ID FROM creditors WHERE Name = ? AND Telephone = ?";
+    $check_stmt = $conn->prepare($check_query);
+    $check_stmt->bind_param("ss", $name, $telephone);
+    $check_stmt->execute();
+    $check_result = $check_stmt->get_result();
 
-        // Check if the creditor already exists (optional)
-        if ($check_result->num_rows > 0) {
-            $message = "A creditor with the same name and telephone already exists.<br>Please try again with different details.";
-            $iconClass = "fa-times-circle";
-            $cardClass = "alert-danger";
-            $bgColor = "#FFA7A7"; // Custom background color for error
-        } else {
+    // Check if the creditor already exists (optional)
+    if ($check_result->num_rows > 0) {
+        $message = "A creditor with the same name and telephone already exists.<br>Please try again with different details.";
+        $iconClass = "fa-times-circle";
+        $cardClass = "alert-danger";
+        $bgColor = "#FFA7A7"; // Custom background color for error
+    } else {
         // Prepare the SQL query for insertion
         $insert_query = "INSERT INTO creditors (Name, Due_Amount, Date, Telephone, NIDA, Passport, VotersID, DriverLicense, TIN_Number) 
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -62,12 +62,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $bgColor = "#FFA7A7"; // Custom background color for error
         }
 
-            // Close the prepared statement
-            $stmt->close();
-        }
+        // Close the prepared statement
+        $stmt->close();
+    }
 
         // Close the check statement
-        $check_stmt->close();
+    $check_stmt->close();
     }
     
     // Close the connection

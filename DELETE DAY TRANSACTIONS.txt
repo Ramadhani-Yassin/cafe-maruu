@@ -1,0 +1,4 @@
+DELETE FROM payment_records WHERE bill_id IN (SELECT bill_id FROM bills WHERE DATE(bill_time) = '2025-11-26');
+DELETE FROM compologs WHERE bill_id IN (SELECT bill_id FROM bills WHERE DATE(bill_time) = '2025-11-26');
+DELETE FROM bill_items WHERE bill_id IN (SELECT bill_id FROM bills WHERE DATE(bill_time) = '2025-11-26');
+DELETE FROM bills WHERE DATE(bill_time) = '2025-11-26';

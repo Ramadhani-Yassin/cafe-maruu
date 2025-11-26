@@ -51,8 +51,8 @@ $items_query = "
 ";
 $items_result = mysqli_query($link, $items_query);
 
-// Initialize PDF for 80mm width with sufficient height for continuous page
-$pdf = new FPDF('P', 'mm', array(80, 297));
+// Initialize PDF for 80mm width with half A4 page height
+$pdf = new FPDF('P', 'mm', array(80, 148.5));
 $pdf->AddPage();
 $pdf->SetMargins(3, 3, 3);
 $pdf->SetAutoPageBreak(false); // Disable auto page break for single continuous page

@@ -2,8 +2,8 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Oct 25, 2025 at 09:53 PM
+-- Host: 127.0.0.1
+-- Generation Time: Nov 26, 2025 at 04:50 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -257,7 +257,25 @@ INSERT INTO `bills` (`bill_id`, `staff_id`, `member_id`, `reservation_id`, `tabl
 (186, NULL, NULL, NULL, NULL, NULL, NULL, '2025-10-18 19:28:02', NULL, NULL, NULL),
 (187, 1, 1, 1120251, NULL, NULL, 'cash', '2025-10-25 20:59:38', '2025-10-25 21:33:18', NULL, NULL),
 (188, 1, 1, 1120251, NULL, NULL, 'cash', '2025-10-25 21:38:48', '2025-10-25 21:45:12', NULL, NULL),
-(189, 1, 1, 1120251, NULL, NULL, 'cash', '2025-10-25 21:52:09', '2025-10-25 21:52:24', NULL, NULL);
+(189, 1, 1, 1120251, NULL, NULL, 'cash', '2025-10-25 21:52:09', '2025-10-25 21:52:24', NULL, NULL),
+(190, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-22 14:32:03', NULL, NULL, NULL),
+(191, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-22 14:46:04', NULL, NULL, NULL),
+(192, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-22 14:54:38', NULL, NULL, NULL),
+(193, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-22 15:00:01', NULL, NULL, NULL),
+(194, NULL, NULL, NULL, NULL, NULL, NULL, '2025-11-23 09:29:40', NULL, NULL, NULL),
+(195, 1, 1, 1120251, NULL, NULL, 'cash', '2025-11-23 09:31:13', '2025-11-23 09:34:55', NULL, NULL),
+(196, 1, 1, 1120251, NULL, NULL, 'creditor', '2025-11-23 09:47:21', '2025-11-23 10:08:50', 7, NULL),
+(197, 1, 1, 1120251, NULL, NULL, 'card', '2025-11-23 09:49:21', '2025-11-23 09:51:12', NULL, NULL),
+(198, 1, 1, 1120251, NULL, NULL, 'cash', '2025-11-25 17:19:28', '2025-11-25 17:20:27', NULL, NULL),
+(199, 1, 1, 1120251, NULL, NULL, 'card', '2025-11-25 17:24:30', '2025-11-25 17:31:43', NULL, NULL),
+(200, 1, 1, 1120251, NULL, NULL, 'card', '2025-11-25 17:29:30', '2025-11-25 17:30:10', NULL, NULL),
+(201, 1, 1, 1120251, NULL, NULL, 'creditor', '2025-11-25 17:45:58', '2025-11-25 18:21:19', 8, NULL),
+(202, 1, 1, 1120251, NULL, NULL, 'cash', '2025-11-25 18:26:41', '2025-11-25 18:32:41', NULL, NULL),
+(203, 1, 1, 1120251, NULL, NULL, 'cash', '2025-11-25 18:29:08', '2025-11-25 18:29:34', NULL, NULL),
+(204, 1, 1, 1120251, NULL, NULL, 'cash', '2025-11-25 18:35:59', '2025-11-25 18:36:28', NULL, NULL),
+(205, 1, 1, 1120251, NULL, NULL, 'cash', '2025-11-26 16:33:00', '2025-11-26 16:34:15', NULL, NULL),
+(206, 1, 1, 1120251, NULL, NULL, 'cash', '2025-11-26 16:34:30', '2025-11-26 16:39:36', NULL, NULL),
+(207, 1, 1, 1120251, NULL, NULL, 'cash', '2025-11-26 16:41:14', '2025-11-26 16:44:31', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -346,7 +364,26 @@ INSERT INTO `bill_items` (`bill_item_id`, `bill_id`, `item_id`, `quantity`, `ite
 (227, 185, 'F069', 2, 'menu', 'base', 'menu'),
 (228, 187, 'F0655', 2, 'menu', 'base', 'menu'),
 (230, 188, '125', 1, 'menu', 'aggregate', 'stock'),
-(231, 189, '125', 1, 'menu', 'aggregate', 'stock');
+(231, 189, '125', 1, 'menu', 'aggregate', 'stock'),
+(232, 195, 'J5656', 1, 'menu', 'base', 'menu'),
+(233, 196, 'F068', 1, 'menu', 'base', 'menu'),
+(234, 198, 'F068', 2, 'menu', 'base', 'menu'),
+(235, 200, '125', 1, 'menu', 'aggregate', 'stock'),
+(237, 201, '125', 1, 'menu', 'aggregate', 'stock'),
+(238, 202, '29', 1, 'menu', 'base', 'stock'),
+(239, 204, 'F068', 2, 'menu', 'base', 'menu'),
+(240, 205, 'F068', 1, 'menu', 'base', 'menu'),
+(241, 206, 'F068', 2, 'menu', 'base', 'menu'),
+(242, 207, 'F068', 2, 'menu', 'base', 'menu'),
+(243, 207, 'F069', 1, 'menu', 'base', 'menu'),
+(244, 207, 'F006', 1, 'menu', 'base', 'menu'),
+(245, 207, 'F025', 1, 'menu', 'base', 'menu'),
+(246, 207, '110', 1, 'menu', 'base', 'stock'),
+(247, 207, 'F057', 1, 'menu', 'base', 'menu'),
+(248, 207, 'F026', 1, 'menu', 'base', 'menu'),
+(249, 207, 'F015', 1, 'menu', 'base', 'menu'),
+(250, 207, 'F012', 1, 'menu', 'base', 'menu'),
+(251, 207, 'F016', 1, 'menu', 'base', 'menu');
 
 -- --------------------------------------------------------
 
@@ -405,18 +442,26 @@ CREATE TABLE `creditors` (
   `Name` varchar(100) NOT NULL,
   `Due_Amount` decimal(10,2) NOT NULL,
   `Date` datetime NOT NULL DEFAULT current_timestamp(),
-  `Telephone` varchar(15) DEFAULT NULL
+  `Telephone` varchar(15) DEFAULT NULL,
+  `NIDA` varchar(50) DEFAULT NULL,
+  `Passport` varchar(50) DEFAULT NULL,
+  `VotersID` varchar(50) DEFAULT NULL,
+  `DriverLicense` varchar(50) DEFAULT NULL,
+  `TIN_Number` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `creditors`
 --
 
-INSERT INTO `creditors` (`ID`, `Name`, `Due_Amount`, `Date`, `Telephone`) VALUES
-(1, 'Admins', 250000.00, '2025-03-18 08:57:09', '+2556210'),
-(4, 'RAMADHANI RAMADHANI', 727000.00, '2025-03-19 15:39:56', '+255621060107'),
-(5, 'Admins', 20000.00, '2025-03-21 18:29:01', '123456789'),
-(6, 'RAMADHANI RAMADHANI', 1025656.00, '2025-07-29 08:11:18', '6666665555');
+INSERT INTO `creditors` (`ID`, `Name`, `Due_Amount`, `Date`, `Telephone`, `NIDA`, `Passport`, `VotersID`, `DriverLicense`, `TIN_Number`) VALUES
+(1, 'Admins', 250000.00, '2025-03-18 08:57:09', '+2556210', NULL, NULL, NULL, NULL, NULL),
+(4, 'RAMADHANI RAMADHANI', 727000.00, '2025-03-19 15:39:56', '+255621060107', NULL, NULL, NULL, NULL, NULL),
+(5, 'Admins', 20000.00, '2025-03-21 18:29:01', '123456789', NULL, NULL, NULL, NULL, NULL),
+(6, 'RAMADHANI RAMADHANI', 1025656.00, '2025-07-29 08:11:18', '6666665555', NULL, NULL, NULL, NULL, NULL),
+(7, 'Test', 19000.00, '2025-11-23 10:08:09', '0621111111111', NULL, NULL, NULL, NULL, NULL),
+(8, 'community', 5120.00, '2025-11-25 18:20:16', '565656565656', '565656565656', NULL, NULL, NULL, NULL),
+(9, 'Try', 0.00, '2025-11-25 18:22:59', '+5656565656', NULL, NULL, NULL, NULL, '565656565656');
 
 -- --------------------------------------------------------
 
@@ -452,10 +497,30 @@ INSERT INTO `kitchen` (`kitchen_id`, `table_id`, `item_id`, `quantity`, `time_su
 (142, NULL, 'F009', 3, '2025-07-29 09:00:21', '2025-08-11 20:19:14'),
 (144, NULL, 'F002', 1, '2025-08-11 20:18:31', '2025-08-11 20:19:15'),
 (145, NULL, 'F069', 3, '2025-08-11 20:19:52', '2025-08-17 15:10:34'),
-(150, NULL, 'F017', 3, '2025-08-17 15:28:30', NULL),
-(152, NULL, 'F002', 5, '2025-08-17 15:29:56', NULL),
-(162, NULL, 'F068', 1, '2025-10-18 19:25:12', NULL),
-(163, NULL, 'F069', 2, '2025-10-18 19:26:19', NULL);
+(150, NULL, 'F017', 3, '2025-08-17 15:28:30', '2025-11-23 10:03:53'),
+(152, NULL, 'F002', 5, '2025-08-17 15:29:56', '2025-11-23 10:05:57'),
+(163, NULL, 'F069', 2, '2025-10-18 19:26:19', '2025-11-23 10:05:58'),
+(166, NULL, 'J5656', 1, '2025-11-23 09:34:09', '2025-11-23 10:05:58'),
+(167, NULL, 'F016', 6, '2025-11-23 09:49:21', '2025-11-23 10:05:59'),
+(168, NULL, 'F002', 2, '2025-11-23 09:50:19', '2025-11-23 10:05:59'),
+(169, NULL, 'F003', 2, '2025-11-23 09:50:23', '2025-11-23 10:06:00'),
+(170, NULL, 'F004', 4, '2025-11-23 09:50:27', '2025-11-23 10:06:00'),
+(171, NULL, 'F004', 4, '2025-11-23 09:50:34', '2025-11-23 10:06:01'),
+(172, NULL, 'F006', 1, '2025-11-23 09:50:40', '2025-11-23 10:06:01'),
+(175, NULL, 'F001', 1, '2025-11-25 17:24:30', NULL),
+(177, NULL, 'F001', 1, '2025-11-25 18:29:08', NULL),
+(178, NULL, 'F068', 2, '2025-11-25 18:36:06', NULL),
+(179, NULL, 'F068', 1, '2025-11-26 16:33:15', NULL),
+(180, NULL, 'F068', 2, '2025-11-26 16:34:38', NULL),
+(181, NULL, 'F068', 2, '2025-11-26 16:41:37', NULL),
+(182, NULL, 'F069', 1, '2025-11-26 16:42:26', NULL),
+(183, NULL, 'F006', 1, '2025-11-26 16:42:33', NULL),
+(184, NULL, 'F025', 1, '2025-11-26 16:42:43', NULL),
+(185, NULL, 'F057', 1, '2025-11-26 16:43:11', NULL),
+(186, NULL, 'F026', 1, '2025-11-26 16:43:33', NULL),
+(187, NULL, 'F015', 1, '2025-11-26 16:43:40', NULL),
+(188, NULL, 'F012', 1, '2025-11-26 16:43:53', NULL),
+(189, NULL, 'F016', 1, '2025-11-26 16:44:01', NULL);
 
 -- --------------------------------------------------------
 
@@ -475,7 +540,7 @@ CREATE TABLE `memberships` (
 --
 
 INSERT INTO `memberships` (`member_id`, `member_name`, `points`, `account_id`) VALUES
-(1, 'Default ', 11801450, 2);
+(1, 'Default ', 12586135, 2);
 
 -- --------------------------------------------------------
 
@@ -578,7 +643,8 @@ INSERT INTO `menu` (`item_id`, `item_name`, `item_type`, `item_category`, `item_
 ('F076', 'Prosciutto Pizza', 'PIZZA', 'Main Dishes', 30000.00, 0.00, NULL, 'Tomato sauce, mozarella cheese, ham and\r\nmushrooms'),
 ('F077', 'Mexican Pizza', 'PIZZA', 'Main Dishes', 30000.00, 0.00, NULL, 'Bolognaise, mozzarella cheese, sweetcorn and\r\nfresh chilli.'),
 ('F078', 'Hawaii pizza', 'PIZZA', 'Main Dishes', 30000.00, 0.00, NULL, 'Tomato, mozzarella cheese, salami and\r\npineapple'),
-('FD5656', 'Brooke Salinas', 'GRILLED • FRIED', 'Main Dishes', 830.00, 0.00, NULL, 'Fugiat animi excep');
+('FD5656', 'Brooke Salinas', 'GRILLED • FRIED', 'Main Dishes', 830.00, 0.00, NULL, 'Fugiat animi excep'),
+('J5656', 'Capuccino', 'BREAKFAST', 'Main Dishes', 55555.00, 555.00, 'ingredients,labor', 'Done');
 
 -- --------------------------------------------------------
 
@@ -605,34 +671,46 @@ CREATE TABLE `payment_records` (
 -- Dumping data for table `payment_records`
 --
 
-INSERT INTO `payment_records` (`record_id`, `bill_id`, `payment_method`, `payment_amount`, `payment_time`, `staff_id`, `member_id`, `tax_amount`) VALUES
-(1, 108, 'cash', 406000.00, '2025-03-24 13:32:52', 1, 1, 0.00),
-(2, 110, 'card', 84000.00, '2025-03-24 13:34:00', 1, 1, 4000.00),
-(3, 111, 'card', 59850.00, '2025-03-25 06:46:23', 1, 1, 2850.00),
-(4, 115, 'card', 141750.00, '2025-03-25 06:47:30', 1, 1, 6750.00),
-(5, 122, 'card', 5250.00, '2025-03-25 13:27:05', 1, 1, 250.00),
-(6, 124, 'cash', 10000.00, '2025-03-25 13:30:32', 1, 1, 0.00),
-(7, 127, 'cash', 110000.00, '2025-03-25 13:41:11', 1, 1, 0.00),
-(8, 130, 'cash', 10000.00, '2025-03-25 13:46:55', 1, 1, 0.00),
-(9, 131, 'card', 84000.00, '2025-03-25 13:47:22', 1, 1, 4000.00),
-(10, 134, 'cash', 120000.00, '2025-03-25 13:52:14', 1, 1, 0.00),
-(11, 136, 'cash', 138000.00, '2025-03-25 13:54:59', 1, 1, 0.00),
-(12, 143, 'card', 42000.00, '2025-04-01 08:44:10', 1, 1, 2000.00),
-(13, 148, 'card', 221550.00, '2025-05-13 14:47:18', 1, 1, 10550.00),
-(14, 149, 'card', 4200.00, '2025-07-29 07:47:52', 1, 1, 200.00),
-(15, 150, 'cash', 54000.00, '2025-07-29 07:50:52', 1, 1, 0.00),
-(16, 154, 'card', 102900.00, '2025-07-29 08:08:48', 1, 1, 4900.00),
-(17, 157, 'card', 2100.00, '2025-07-29 09:13:33', 1, 1, 100.00),
-(18, 162, 'card', 39900.00, '2025-08-13 14:49:36', 1, 1, 1900.00),
-(19, 167, 'card', 21000.00, '2025-08-17 15:10:07', 1, 1, 1000.00),
-(20, 166, 'card', 39900.00, '2025-08-17 15:11:01', 1, 1, 1900.00),
-(21, 169, 'cash', 8000.00, '2025-08-17 15:27:14', 1, 1, 0.00),
-(22, 176, 'card', 39900.00, '2025-10-13 14:32:52', 1, 1, 1900.00),
-(23, 180, 'card', 588000.00, '2025-10-13 14:44:06', 1, 1, 28000.00),
-(24, 184, 'card', 19950.00, '2025-10-18 19:25:39', 1, 1, 950.00),
-(25, 187, 'cash', 10000.00, '2025-10-25 21:33:18', 1, 1, 0.00),
-(26, 188, 'cash', 4000.00, '2025-10-25 21:45:12', 1, 1, 0.00),
-(27, 189, 'cash', 4000.00, '2025-10-25 21:52:24', 1, 1, 0.00);
+INSERT INTO `payment_records` (`record_id`, `bill_id`, `payment_method`, `payment_amount`, `payment_time`, `staff_id`, `member_id`, `tax_amount`, `tip_amount`, `delivery_fee`, `room_service_fee`, `tax_rate`) VALUES
+(1, 108, 'cash', 406000.00, '2025-03-24 13:32:52', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(2, 110, 'card', 84000.00, '2025-03-24 13:34:00', 1, 1, 4000.00, 0.00, 0.00, 0.00, 0.00),
+(3, 111, 'card', 59850.00, '2025-03-25 06:46:23', 1, 1, 2850.00, 0.00, 0.00, 0.00, 0.00),
+(4, 115, 'card', 141750.00, '2025-03-25 06:47:30', 1, 1, 6750.00, 0.00, 0.00, 0.00, 0.00),
+(5, 122, 'card', 5250.00, '2025-03-25 13:27:05', 1, 1, 250.00, 0.00, 0.00, 0.00, 0.00),
+(6, 124, 'cash', 10000.00, '2025-03-25 13:30:32', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(7, 127, 'cash', 110000.00, '2025-03-25 13:41:11', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(8, 130, 'cash', 10000.00, '2025-03-25 13:46:55', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(9, 131, 'card', 84000.00, '2025-03-25 13:47:22', 1, 1, 4000.00, 0.00, 0.00, 0.00, 0.00),
+(10, 134, 'cash', 120000.00, '2025-03-25 13:52:14', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(11, 136, 'cash', 138000.00, '2025-03-25 13:54:59', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(12, 143, 'card', 42000.00, '2025-04-01 08:44:10', 1, 1, 2000.00, 0.00, 0.00, 0.00, 0.00),
+(13, 148, 'card', 221550.00, '2025-05-13 14:47:18', 1, 1, 10550.00, 0.00, 0.00, 0.00, 0.00),
+(14, 149, 'card', 4200.00, '2025-07-29 07:47:52', 1, 1, 200.00, 0.00, 0.00, 0.00, 0.00),
+(15, 150, 'cash', 54000.00, '2025-07-29 07:50:52', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(16, 154, 'card', 102900.00, '2025-07-29 08:08:48', 1, 1, 4900.00, 0.00, 0.00, 0.00, 0.00),
+(17, 157, 'card', 2100.00, '2025-07-29 09:13:33', 1, 1, 100.00, 0.00, 0.00, 0.00, 0.00),
+(18, 162, 'card', 39900.00, '2025-08-13 14:49:36', 1, 1, 1900.00, 0.00, 0.00, 0.00, 0.00),
+(19, 167, 'card', 21000.00, '2025-08-17 15:10:07', 1, 1, 1000.00, 0.00, 0.00, 0.00, 0.00),
+(20, 166, 'card', 39900.00, '2025-08-17 15:11:01', 1, 1, 1900.00, 0.00, 0.00, 0.00, 0.00),
+(21, 169, 'cash', 8000.00, '2025-08-17 15:27:14', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(22, 176, 'card', 39900.00, '2025-10-13 14:32:52', 1, 1, 1900.00, 0.00, 0.00, 0.00, 0.00),
+(23, 180, 'card', 588000.00, '2025-10-13 14:44:06', 1, 1, 28000.00, 0.00, 0.00, 0.00, 0.00),
+(24, 184, 'card', 19950.00, '2025-10-18 19:25:39', 1, 1, 950.00, 0.00, 0.00, 0.00, 0.00),
+(25, 187, 'cash', 10000.00, '2025-10-25 21:33:18', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(26, 188, 'cash', 4000.00, '2025-10-25 21:45:12', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(27, 189, 'cash', 4000.00, '2025-10-25 21:52:24', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(28, 195, 'cash', 55555.00, '2025-11-23 09:34:55', 1, 1, 0.00, 0.00, 0.00, 0.00, 0.00),
+(29, 197, 'card', 204750.00, '2025-11-23 09:51:12', 1, 1, 9750.00, 0.00, 0.00, 0.00, 0.00),
+(30, 198, 'cash', 58640.00, '2025-11-25 17:20:27', 1, 1, 6840.00, 3800.00, 5000.00, 5000.00, 0.18),
+(31, 200, 'card', 10620.00, '2025-11-25 17:30:10', 1, 1, 720.00, 400.00, 500.00, 5000.00, 0.18),
+(32, 199, 'card', 26600.00, '2025-11-25 17:31:43', 1, 1, 3600.00, 2000.00, 500.00, 500.00, 0.18),
+(33, 201, 'creditor', 5120.00, '2025-11-25 18:21:19', 1, 1, 720.00, 400.00, 0.00, 0.00, 0.18),
+(34, 203, 'cash', 26600.00, '2025-11-25 18:29:34', 1, 1, 3600.00, 2000.00, 500.00, 500.00, 0.18),
+(35, 202, 'cash', 7400.00, '2025-11-25 18:32:41', 1, 1, 900.00, 500.00, 500.00, 500.00, 0.18),
+(36, 204, 'cash', 49640.00, '2025-11-25 18:36:28', 1, 1, 6840.00, 3800.00, 500.00, 500.00, 0.18),
+(37, 205, 'cash', 34320.00, '2025-11-26 16:34:15', 1, 1, 3420.00, 1900.00, 5000.00, 5000.00, 0.18),
+(38, 206, 'cash', 58640.00, '2025-11-26 16:39:36', 1, 1, 6840.00, 3800.00, 5000.00, 5000.00, 0.18),
+(39, 207, 'cash', 251920.00, '2025-11-26 16:44:31', 1, 1, 34020.00, 18900.00, 5000.00, 5000.00, 0.18);
 
 -- --------------------------------------------------------
 
@@ -668,7 +746,15 @@ INSERT INTO `pendingorderitems` (`pending_order_item_id`, `order_id`, `item_id`,
 (142, 64, 'F001', 'THE BIG BREAKFAST', 1, 'menu', 'base', 20000.00),
 (143, 66, 'F001', 'THE BIG BREAKFAST', 20, 'menu', 'base', 20000.00),
 (144, 66, 'F002', ' Pancakes ', 5, 'menu', 'base', 12000.00),
-(145, 67, 'F001', 'THE BIG BREAKFAST', 28, 'menu', 'base', 20000.00);
+(145, 67, 'F001', 'THE BIG BREAKFAST', 28, 'menu', 'base', 20000.00),
+(149, 70, 'F016', 'Seafood soup', 6, 'menu', 'base', 16000.00),
+(150, 70, 'F002', ' Pancakes ', 2, 'menu', 'base', 12000.00),
+(151, 70, 'F003', 'Porridge', 2, 'menu', 'base', 10000.00),
+(152, 70, 'F004', 'Fruit Platter', 4, 'menu', 'base', 10000.00),
+(153, 70, 'F004', 'Fruit Platter', 4, 'menu', 'base', 10000.00),
+(154, 70, 'F006', 'Bread with homemade topping', 1, 'menu', 'base', 15000.00),
+(155, 71, 'F001', 'THE BIG BREAKFAST', 1, 'menu', 'base', 20000.00),
+(156, 72, 'F001', 'THE BIG BREAKFAST', 1, 'menu', 'base', 20000.00);
 
 -- --------------------------------------------------------
 
@@ -696,7 +782,10 @@ INSERT INTO `pendingorders` (`order_id`, `customer_name`, `bill_id`, `order_date
 (66, 'TABLE 1', 171, '2025-08-17 15:29:35', 'Pending'),
 (67, 'Ok', 180, '2025-10-13 14:43:42', 'Pending'),
 (68, 'Rama', 182, '2025-10-13 14:48:36', 'Pending'),
-(69, 'MOGUL', NULL, '2025-10-18 19:27:46', 'Pending');
+(69, 'MOGUL', NULL, '2025-10-18 19:27:46', 'Pending'),
+(70, 'Table', 197, '2025-11-23 09:47:59', 'Pending'),
+(71, 'new one', 199, '2025-11-25 17:24:24', 'Pending'),
+(72, 'MIKE', 203, '2025-11-25 18:29:03', 'Pending');
 
 -- --------------------------------------------------------
 
@@ -925,7 +1014,7 @@ INSERT INTO `stock` (`ItemID`, `ItemName`, `BaseUnitQuantity`, `ConversionRatio`
 (26, 'Campari', 1, 1, 5000.00, 5000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
 (27, 'Martini Rosso', 1, 1, 5000.00, 5000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
 (28, 'Martini Bianco', 1, 1, 5000.00, 5000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
-(29, 'Pimm\'s', 1, 1, 5000.00, 5000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
+(29, 'Pimm\'s', 0, 1, 5000.00, 5000.00, 0.00, '2025-11-25 17:26:50', 'Bottle', 'Tot', 0),
 (30, 'Archers', 1, 1, 5000.00, 5000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
 (31, 'Cinzano Rosso', 1, 1, 5000.00, 5000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
 (32, 'Cinzano Bianco', 1, 1, 5000.00, 5000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
@@ -1006,7 +1095,7 @@ INSERT INTO `stock` (`ItemID`, `ItemName`, `BaseUnitQuantity`, `ConversionRatio`
 (107, 'Lions Hill White', 1, 1, 45000.00, 45000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
 (108, 'Lions Hill Red', 1, 1, 45000.00, 45000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
 (109, 'Cuvee Brut', 1, 1, 40000.00, 40000.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
-(110, 'Beach House Sauvignon Black', 1, 10, 0.00, 0.00, 0.00, '2025-07-29 06:03:05', 'Bottle', 'Tot', 1),
+(110, 'Beach House Sauvignon Black', 0, 10, 0.00, 0.00, 0.00, '2025-11-26 15:42:50', 'Bottle', 'Tot', 1),
 (111, 'Beach House Sunset Shiraz', 1, 1, 0.00, 0.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
 (112, 'Weaver Chardonnay', 1, 1, 0.00, 0.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
 (113, 'Weaver Red', 1, 1, 0.00, 0.00, 0.00, '2025-03-19 17:51:34', 'Bottle', 'Tot', 0),
@@ -1015,7 +1104,7 @@ INSERT INTO `stock` (`ItemID`, `ItemName`, `BaseUnitQuantity`, `ConversionRatio`
 (121, 'MVINYO', 5, 6, 55555.00, 555.00, 0.00, '2025-08-17 13:11:34', 'Bottle', 'Tot', 0),
 (122, 'Pepsi', 6, 5, 5656.00, 55.00, 0.00, '2025-08-17 13:12:29', 'Bottle', 'Tot', 0),
 (123, 'TOMATO SAUCE', 6, 16, 6000.00, 6000.00, 0.00, '2025-08-17 13:38:54', 'Bottle', 'Tot', 0),
-(125, 'Beer', 5, 6, 20000.00, 4000.00, 1000.00, '2025-10-25 19:52:19', 'Bottle', 'Tot', 2);
+(125, 'Beer', 5, 6, 20000.00, 4000.00, 1000.00, '2025-11-25 16:57:51', 'Bottle', 'Tot', 4);
 
 -- --------------------------------------------------------
 
@@ -1228,13 +1317,13 @@ ALTER TABLE `accounts`
 -- AUTO_INCREMENT for table `bills`
 --
 ALTER TABLE `bills`
-  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
+  MODIFY `bill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=208;
 
 --
 -- AUTO_INCREMENT for table `bill_items`
 --
 ALTER TABLE `bill_items`
-  MODIFY `bill_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=232;
+  MODIFY `bill_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=252;
 
 --
 -- AUTO_INCREMENT for table `card_payments`
@@ -1252,13 +1341,13 @@ ALTER TABLE `compologs`
 -- AUTO_INCREMENT for table `creditors`
 --
 ALTER TABLE `creditors`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `kitchen`
 --
 ALTER TABLE `kitchen`
-  MODIFY `kitchen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `kitchen_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=190;
 
 --
 -- AUTO_INCREMENT for table `memberships`
@@ -1270,19 +1359,19 @@ ALTER TABLE `memberships`
 -- AUTO_INCREMENT for table `payment_records`
 --
 ALTER TABLE `payment_records`
-  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `record_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `pendingorderitems`
 --
 ALTER TABLE `pendingorderitems`
-  MODIFY `pending_order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
+  MODIFY `pending_order_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=157;
 
 --
 -- AUTO_INCREMENT for table `pendingorders`
 --
 ALTER TABLE `pendingorders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 
 --
 -- AUTO_INCREMENT for table `permissions`
