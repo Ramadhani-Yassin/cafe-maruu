@@ -28,7 +28,7 @@ if ($reservationInfo) {
             $this->SetFont('Arial', 'B', 20);
 
             // Create the logo text
-            $logoText = "Migude RESTAURANT";
+            $logoText = "Darajani Motel";
             
             // Add a link-like style (you cannot create actual HTML links in PDF)
             $this->SetTextColor(0, 0, 0); // Set the text color to blue

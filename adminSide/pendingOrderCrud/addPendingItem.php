@@ -113,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($unit === 'base') {
                     if ($quantity > $base_quantity) {
                         echo "<script>
-                        alert('Not enough Items available on Migude Stock ⚠️‼️.');
+                        alert('Not enough Items available on Darajani Motel Stock ⚠️‼️.');
                         window.history.back();
                       </script>";
                 exit(); // Stop further execution
@@ -126,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 elseif ($unit === 'aggregate') {
                     if ($quantity > $aggregate_quantity) {
                         echo "<script>
-                        alert('Not enough Items available on Migude Stock ⚠️‼️.');
+                        alert('Not enough Items available on Darajani Motel Stock ⚠️‼️.');
                         window.history.back();
                       </script>";
                 exit(); // Stop further execution

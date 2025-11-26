@@ -61,7 +61,7 @@ $password_err = "";
     <p>&nbsp;&nbsp;&nbsp;</p> 
     <section id="signup">
     <div class="container my-6 ">
-    <a class="nav-link" href="../../customerSide/home/home.php"> <h1 class="text-center" style="font-family:Copperplate; color:white;"> MIGUDE RESTAURANT</h1><span class="sr-only"></span></a>
+    <a class="nav-link" href="../../customerSide/home/home.php"> <h1 class="text-center" style="font-family:Copperplate; color:white;"> Darajani Motel</h1><span class="sr-only"></span></a>
 
     
     <div class="wrapper">

@@ -24,7 +24,7 @@ class PDF extends FPDF
     function Header()
     {
         $this->SetFont('Arial', 'B', 20);
-        $this->Cell(0, 10, "Migude Dining & Bar Report", 0, 1, 'C');
+        $this->Cell(0, 10, "Darajani Motel Report", 0, 1, 'C');
         $this->Ln(6); // Decreased spacing here
     }
 

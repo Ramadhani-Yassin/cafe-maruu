@@ -167,7 +167,7 @@
         <div class="contact-info">
           <div class='icon'><img src="../image/icons8-email-100.png" alt=""/></div>
           <h1>Email</h1>
-          <h2>migude@gmail.com</h2> 
+          <h2>darajanimotel@gmail.com</h2> 
         </div>
       </div>
       

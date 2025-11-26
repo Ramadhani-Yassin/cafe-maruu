@@ -187,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="login-container">
     <div class="login_wrapper">
-        <a class="nav-link" href="../home/home.php#hero"> <h1 class="text-center" style="font-family:Copperplate; color:white;"> MIGUDE RESTAURANT</h1><span class="sr-only"></span></a>
+        <a class="nav-link" href="../home/home.php#hero"> <h1 class="text-center" style="font-family:Copperplate; color:white;"> Darajani Motel</h1><span class="sr-only"></span></a>
     
         <div class="wrapper">
            
