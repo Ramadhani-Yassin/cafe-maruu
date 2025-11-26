@@ -371,7 +371,7 @@ if (isset($_POST['pay_bill'])) {
                     <div style="margin-top: 20px;" class="d-flex justify-content-between flex-wrap">
                         <button type="button" class="btn btn-success" id="payBillButton" onclick="payBill()">Pay Bill</button>
                         <?php if ($bill_id > 0): ?>
-                            <a href="../posBackend/orderNote.php?bill_id=<?= $bill_id ?>" class="btn btn-info" id="orderNoteButton" target="_blank">Order Note</a>
+                            <button type="button" class="btn btn-info" id="orderNoteButton" onclick="launchOrderNote()">Order Note</button>
                         <?php endif; ?>
                     </div>
 
@@ -470,6 +470,31 @@ if (isset($_POST['pay_bill'])) {
         });
 
         window.location.href = `${endpoint}?${params.toString()}`;
+    }
+
+    function launchOrderNote() {
+        const roomInput = document.getElementById('roomServiceAmount');
+        const deliveryInput = document.getElementById('deliveryAmount');
+        const roomValue = parseFloat(roomInput.value) || 0;
+        const deliveryValue = parseFloat(deliveryInput.value) || 0;
+
+        if (roomValue < 0 || deliveryValue < 0) {
+            alert('Additional charges cannot be negative.');
+            return;
+        }
+
+        if (!paymentContext.billId || paymentContext.billId === '0') {
+            alert('Please close this pending order to generate a bill before creating an order note.');
+            return;
+        }
+
+        const params = new URLSearchParams({
+            bill_id: paymentContext.billId,
+            room_service_fee: roomValue.toFixed(2),
+            delivery_fee: deliveryValue.toFixed(2)
+        });
+
+        window.open(`../posBackend/orderNote.php?${params.toString()}`, '_blank');
     }
     </script>
 </body>

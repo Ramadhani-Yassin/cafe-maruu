@@ -394,7 +394,7 @@ function createNewBillRecord($table_id) {
                     // Display the "Pay Bill" and "Order Note" buttons
                     echo '<div class="d-flex justify-content-between flex-wrap" style="margin-top: 20px;">';
                     echo '<button type="button" class="btn btn-success" id="payBillButton" onclick="payBill()">Pay Bill</button>';
-                    echo '<a href="orderNote.php?bill_id=' . $bill_id . '" class="btn btn-info" id="orderNoteButton" target="_blank">Order Note</a>';
+                    echo '<button type="button" class="btn btn-info" id="orderNoteButton" onclick="launchOrderNote()">Order Note</button>';
                     echo '</div>';
                 } else {
                     echo '<h3>Add Item To Cart to Proceed</h3>';
@@ -508,6 +508,26 @@ function createNewBillRecord($table_id) {
             });
 
             window.location.href = `${endpoint}?${params.toString()}`;
+        }
+
+        function launchOrderNote() {
+            const roomInput = document.getElementById('roomServiceAmount');
+            const deliveryInput = document.getElementById('deliveryAmount');
+            const roomValue = parseFloat(roomInput.value) || 0;
+            const deliveryValue = parseFloat(deliveryInput.value) || 0;
+
+            if (roomValue < 0 || deliveryValue < 0) {
+                alert('Additional charges cannot be negative.');
+                return;
+            }
+
+            const params = new URLSearchParams({
+                bill_id: paymentContext.billId,
+                room_service_fee: roomValue.toFixed(2),
+                delivery_fee: deliveryValue.toFixed(2)
+            });
+
+            window.open(`orderNote.php?${params.toString()}`, '_blank');
         }
     </script>
 </body>

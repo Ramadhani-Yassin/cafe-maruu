@@ -79,11 +79,11 @@ if ($summary_result && mysqli_num_rows($summary_result) > 0) {
     $payment_summary['tax_rate'] = $payment_summary['tax_rate'] ?? 0.18;
 }
 
-// Initialize PDF for 80mm width
-$pdf = new FPDF('P', 'mm', array(80, 80));
+// Initialize PDF for 80mm width with sufficient height for continuous page
+$pdf = new FPDF('P', 'mm', array(80, 297));
 $pdf->AddPage();
 $pdf->SetMargins(3, 3, 3);
-$pdf->SetAutoPageBreak(true, 3);
+$pdf->SetAutoPageBreak(false); // Disable auto page break for single continuous page
 
 // Convert bill_time to local time
 $bill_time_cat = 'N/A';

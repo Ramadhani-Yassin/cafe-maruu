@@ -12,6 +12,10 @@ if (!isset($_GET['bill_id'])) {
 
 $bill_id = mysqli_real_escape_string($link, $_GET['bill_id']);
 
+// Get delivery and room service fees from URL parameters
+$room_service_fee = isset($_GET['room_service_fee']) ? floatval($_GET['room_service_fee']) : 0;
+$delivery_fee = isset($_GET['delivery_fee']) ? floatval($_GET['delivery_fee']) : 0;
+
 // Fetch bill details
 $bill_query = "SELECT * FROM bills WHERE bill_id = '$bill_id'";
 $bill_result = mysqli_query($link, $bill_query);
@@ -47,11 +51,11 @@ $items_query = "
 ";
 $items_result = mysqli_query($link, $items_query);
 
-// Initialize PDF for 80mm width
-$pdf = new FPDF('P', 'mm', array(80, 80));
+// Initialize PDF for 80mm width with sufficient height for continuous page
+$pdf = new FPDF('P', 'mm', array(80, 297));
 $pdf->AddPage();
 $pdf->SetMargins(3, 3, 3);
-$pdf->SetAutoPageBreak(true, 3);
+$pdf->SetAutoPageBreak(false); // Disable auto page break for single continuous page
 
 // Convert bill_time to local time
 $bill_time_cat = 'N/A';
@@ -114,9 +118,9 @@ $tax_rate = 0.18;
 $tip_rate = 0.10;
 $tax_amount = $cart_total * $tax_rate;
 $tip_amount = $cart_total * $tip_rate;
-$room_fee = 0;
-$delivery_fee = 0;
-$estimated_total = $cart_total + $tax_amount + $tip_amount + $room_fee + $delivery_fee;
+$room_fee = $room_service_fee;
+$delivery_fee_total = $delivery_fee;
+$estimated_total = $cart_total + $tax_amount + $tip_amount + $room_fee + $delivery_fee_total;
 
 $pdf->Cell(57, 5, 'SUBTOTAL:', 0);
 $pdf->Cell(15, 5, number_format($cart_total, 0), 0, 0, 'R');
@@ -135,7 +139,7 @@ $pdf->Cell(15, 5, number_format($room_fee, 0), 0, 0, 'R');
 $pdf->Ln();
 
 $pdf->Cell(57, 5, 'DELIVERY SERVICE:', 0);
-$pdf->Cell(15, 5, number_format($delivery_fee, 0), 0, 0, 'R');
+$pdf->Cell(15, 5, number_format($delivery_fee_total, 0), 0, 0, 'R');
 $pdf->Ln();
 
 $pdf->Cell(0, 1, str_repeat('-', 72), 0, 1);
