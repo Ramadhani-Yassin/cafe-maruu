@@ -121,132 +121,294 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
 <style>
     .report-container {
         margin-top: 6rem;
-        padding-top: 30px;
-        padding-left: 150px;
-        padding-right: 20px;
+        padding: 30px 20px;
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    @media (min-width: 992px) {
+        .report-container {
+            padding-left: 180px;
+            padding-right: 30px;
+        }
     }
     
     .report-card {
-        border-radius: 0;
-        border: 1px solid #ddd;
-        box-shadow: none;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        background: #fff;
     }
     
     .card-header {
-        background-color: #fff !important;
-        border-bottom: 1px solid #ddd;
-        color: #000 !important;
-        padding: 15px 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        border-bottom: none;
+        color: #fff !important;
+        padding: 20px 25px;
+        border-radius: 8px 8px 0 0 !important;
     }
     
     .card-title {
         font-weight: 600;
         margin: 0;
+        font-size: 1.5rem;
+        color: #fff;
+    }
+    
+    .period-selector {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 25px;
     }
     
     .period-selector .btn {
-        margin: 0 5px 5px 0;
+        margin: 3px;
         background-color: #fff;
-        color: #000;
-        border: 1px solid #ddd;
-        border-radius: 0;
-        padding: 8px 15px;
+        color: #495057;
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
     }
     
     .period-selector .btn:hover {
-        background-color: #000;
+        background-color: #667eea;
         color: #fff;
-        border-color: #000;
-    }
-    
-    .period-selector .btn-outline-primary {
-        background-color: #fff;
-        color: #000;
-        border: 1px solid #ddd;
+        border-color: #667eea;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
     }
     
     .period-selector .btn-primary {
-        background-color: #000;
+        background-color: #667eea;
         color: #fff;
-        border-color: #000;
+        border-color: #667eea;
+        box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
     }
     
-    .table {
-        border: 1px solid #ddd;
+    .summary-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 25px;
     }
-
+    
+    .summary-card {
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .summary-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: #667eea;
+    }
+    
+    .summary-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    }
+    
+    .summary-card .card-title {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 500;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .summary-card .card-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #212529;
+        margin: 0;
+    }
+    
+    .summary-card.primary .card-text { color: #667eea; }
+    .summary-card.success .card-text { color: #28a745; }
+    .summary-card.danger .card-text { color: #dc3545; }
+    .summary-card.warning .card-text { color: #ffc107; }
+    .summary-card.info .card-text { color: #17a2b8; }
+    
     .report-table-wrapper {
         width: 100%;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        margin-top: 25px;
     }
 
-    .table.report-table th,
-    .table.report-table td {
-        white-space: normal;
-        word-break: break-word;
-        font-size: 0.92rem;
-        vertical-align: middle;
+    .table.report-table {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .table.report-table th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        color: #495057;
+        padding: 12px 10px;
+        white-space: nowrap;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
     
-    .table thead th {
+    .table.report-table td {
+        padding: 12px 10px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .table.report-table tbody tr:hover {
         background-color: #f8f9fa;
-        border-bottom: 1px solid #ddd;
-        font-weight: 600;
     }
     
     .table-bordered th,
     .table-bordered td {
-        border: 1px solid #ddd;
+        border: 1px solid #e0e0e0;
     }
     
     .table-striped tbody tr:nth-of-type(odd) {
-        background-color: rgba(0,0,0,.02);
+        background-color: #fafafa;
     }
     
     .btn-danger {
-        background-color: #000;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: #fff;
-        border: 1px solid #000;
-        border-radius: 0;
-        padding: 8px 15px;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 20px;
+        font-weight: 500;
+        transition: all 0.3s ease;
     }
     
     .btn-danger:hover {
-        background-color: #333;
-        border-color: #333;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
     }
     
     .form-control {
-        border-radius: 0;
-        border: 1px solid #ddd;
+        border-radius: 6px;
+        border: 1px solid #dee2e6;
+        padding: 8px 12px;
     }
     
     .input-group-append .btn {
-        border-radius: 0;
+        border-radius: 0 6px 6px 0;
     }
     
     .payment-method {
-        font-weight: bold;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 4px;
+        display: inline-block;
+        font-size: 0.85rem;
     }
+    
+    .payment-method.cash { background: #d4edda; color: #155724; }
+    .payment-method.card { background: #cce5ff; color: #004085; }
+    .payment-method.creditor { background: #fff3cd; color: #856404; }
+    .payment-method.mobile { background: #d1ecf1; color: #0c5460; }
     
     .text-success {
         color: #28a745 !important;
+        font-weight: 600;
     }
     
     .text-danger {
         color: #dc3545 !important;
+        font-weight: 600;
     }
-</style>
-<style>
-    /* Small-screen adjustments */
+    
+    .custom-date-form {
+        margin-top: 10px;
+    }
+    
+    .custom-date-form .input-group {
+        max-width: 500px;
+    }
+    
+    @media (max-width: 991.98px) {
+        .report-container {
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-top: 5rem;
+        }
+        
+        .summary-cards {
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+        }
+        
+        .summary-card .card-text {
+            font-size: 1.25rem;
+        }
+    }
+    
     @media (max-width: 767.98px) {
-        .report-container { padding-left: 16px; padding-right: 16px; margin-top: 5rem; }
-        .period-selector .btn { width: 100%; text-align: center; }
-        .input-group.ml-2 { width: 100%; margin-left: 0 !important; margin-top: 8px; }
-        .report-table-wrapper { margin-top: 1rem; }
+        .period-selector .btn {
+            width: calc(50% - 6px);
+            font-size: 0.85rem;
+            padding: 6px 12px;
+        }
+        
+        .custom-date-form .input-group {
+            width: 100%;
+            max-width: 100%;
+        }
+        
+        .custom-date-form .input-group .form-control {
+            font-size: 0.85rem;
+        }
+        
+        .summary-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .summary-card {
+            padding: 15px;
+        }
+        
+        .summary-card .card-text {
+            font-size: 1.1rem;
+        }
+        
         .table.report-table th,
-        .table.report-table td { font-size: 0.85rem; }
+        .table.report-table td {
+            font-size: 0.8rem;
+            padding: 8px 6px;
+        }
+        
+        .card-title {
+            font-size: 1.25rem;
+        }
+    }
+    
+    @media (max-width: 575.98px) {
+        .summary-cards {
+            grid-template-columns: 1fr;
+        }
+        
+        .period-selector .btn {
+            width: 100%;
+        }
     }
 </style>
 
@@ -267,109 +429,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
                         <a href="?period=year" class="btn <?= $period === 'year' ? 'btn-primary' : 'btn-outline-primary' ?>">This Year</a>
                         
                         <!-- Custom Date Range Form -->
-                        <form method="post" class="form-inline d-inline-block">
-                            <div class="input-group ml-2">
+                        <form method="post" class="custom-date-form">
+                            <div class="input-group">
                                 <input type="date" name="start_date" class="form-control" value="<?= $_POST['start_date'] ?? date('Y-m-d') ?>">
                                 <input type="date" name="end_date" class="form-control" value="<?= $_POST['end_date'] ?? date('Y-m-d') ?>">
                                 <div class="input-group-append">
-                                    <button type="submit" name="custom_range" class="btn btn-dark">Custom Range</button>
+                                    <button type="submit" name="custom_range" class="btn btn-primary">Custom Range</button>
                                 </div>
                             </div>
                         </form>
                     </div>
                     
                     <!-- Summary Cards -->
-                    <div class="row mb-4">
-                        <div class="col-md-3">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Total Sales</h5>
-                                    <h2 class="card-text">TZS <?= number_format($salesData['grandTotal'], 2) ?></h2>
-                                </div>
-                            </div>
+                    <div class="summary-cards">
+                        <div class="summary-card primary">
+                            <h5 class="card-title">Total Sales</h5>
+                            <h2 class="card-text">TZS <?= number_format($salesData['grandTotal'], 2) ?></h2>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Total Tax</h5>
-                                    <h2 class="card-text">TZS <?= number_format($salesData['grandTax'], 2) ?></h2>
-                                </div>
-                            </div>
+                        <div class="summary-card success">
+                            <h5 class="card-title">Total Tax</h5>
+                            <h2 class="card-text">TZS <?= number_format($salesData['grandTax'], 2) ?></h2>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Total Expenses</h5>
-                                    <h2 class="card-text">TZS <?= number_format($salesData['grandExpenses'], 2) ?></h2>
-                                </div>
-                            </div>
+                        <div class="summary-card danger">
+                            <h5 class="card-title">Total Expenses</h5>
+                            <h2 class="card-text">TZS <?= number_format($salesData['grandExpenses'], 2) ?></h2>
                         </div>
-                        <div class="col-md-3">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Net Profit</h5>
-                                    <h2 class="card-text <?= $salesData['grandProfit'] >= 0 ? 'text-success' : 'text-danger' ?>">
-                                        TZS <?= number_format($salesData['grandProfit'], 2) ?>
-                                    </h2>
-                                </div>
-                            </div>
+                        <div class="summary-card <?= $salesData['grandProfit'] >= 0 ? 'success' : 'danger' ?>">
+                            <h5 class="card-title">Net Profit</h5>
+                            <h2 class="card-text">
+                                TZS <?= number_format($salesData['grandProfit'], 2) ?>
+                            </h2>
                         </div>
-                    </div>
-                    
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Tips Collected</h5>
-                                    <h2 class="card-text">TZS <?= number_format($salesData['grandTip'], 2) ?></h2>
-                                </div>
-                            </div>
+                        <div class="summary-card info">
+                            <h5 class="card-title">Tips Collected</h5>
+                            <h2 class="card-text">TZS <?= number_format($salesData['grandTip'], 2) ?></h2>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Room Services</h5>
-                                    <h2 class="card-text">TZS <?= number_format($salesData['grandRoom'], 2) ?></h2>
-                                </div>
-                            </div>
+                        <div class="summary-card warning">
+                            <h5 class="card-title">Room Services</h5>
+                            <h2 class="card-text">TZS <?= number_format($salesData['grandRoom'], 2) ?></h2>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Delivery Services</h5>
-                                    <h2 class="card-text">TZS <?= number_format($salesData['grandDelivery'], 2) ?></h2>
-                                </div>
-                            </div>
+                        <div class="summary-card info">
+                            <h5 class="card-title">Delivery Services</h5>
+                            <h2 class="card-text">TZS <?= number_format($salesData['grandDelivery'], 2) ?></h2>
                         </div>
-                    </div>
-                    
-                    <!-- Additional Summary Row -->
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Transactions</h5>
-                                    <h2 class="card-text"><?= $salesData['totalTransactions'] ?></h2>
-                                </div>
-                            </div>
+                        <div class="summary-card primary">
+                            <h5 class="card-title">Transactions</h5>
+                            <h2 class="card-text"><?= $salesData['totalTransactions'] ?></h2>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Profit Margin</h5>
-                                    <h2 class="card-text <?= ($salesData['grandTotal'] > 0 && ($salesData['grandProfit'] / $salesData['grandTotal']) >= 0) ? 'text-success' : 'text-danger' ?>">
-                                        <?= $salesData['grandTotal'] > 0 ? number_format(($salesData['grandProfit'] / $salesData['grandTotal']) * 100, 1) : 0 ?>%
-                                    </h2>
-                                </div>
-                            </div>
+                        <div class="summary-card <?= ($salesData['grandTotal'] > 0 && ($salesData['grandProfit'] / $salesData['grandTotal']) >= 0) ? 'success' : 'danger' ?>">
+                            <h5 class="card-title">Profit Margin</h5>
+                            <h2 class="card-text">
+                                <?= $salesData['grandTotal'] > 0 ? number_format(($salesData['grandProfit'] / $salesData['grandTotal']) * 100, 1) : 0 ?>%
+                            </h2>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5 class="card-title">Average Order Value</h5>
-                                    <h2 class="card-text">TZS <?= $salesData['totalTransactions'] > 0 ? number_format($salesData['grandTotal'] / $salesData['totalTransactions'], 2) : 0 ?></h2>
-                                </div>
-                            </div>
+                        <div class="summary-card primary">
+                            <h5 class="card-title">Average Order Value</h5>
+                            <h2 class="card-text">TZS <?= $salesData['totalTransactions'] > 0 ? number_format($salesData['grandTotal'] / $salesData['totalTransactions'], 2) : 0 ?></h2>
                         </div>
                     </div>
                     
@@ -393,7 +508,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
                             <tbody>
                                 <?php if (empty($salesData['data'])): ?>
                                     <tr>
-                                        <td colspan="7" class="text-center">No sales data available for this period</td>
+                                        <td colspan="10" class="text-center py-4" style="color: #6c757d;">No sales data available for this period</td>
                                     </tr>
                                 <?php else: ?>
                                     <?php foreach ($salesData['data'] as $row): ?>
@@ -403,7 +518,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['custom_range'])) {
                                         <tr>
                                             <td><?= date('M j, Y', strtotime($row['sale_date'])) ?></td>
                                             <td>
-                                                <span class="payment-method">
+                                                <span class="payment-method <?= strtolower($row['payment_method']) ?>">
                                                     <?= ucfirst($row['payment_method']) ?>
                                                 </span>
                                             </td>
