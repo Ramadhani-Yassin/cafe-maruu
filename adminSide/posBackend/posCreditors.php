@@ -7,7 +7,8 @@ $bill_id = $_GET['bill_id'];
 $staff_id = $_GET['staff_id'];
 $member_id = intval($_GET['member_id']);
 $reservation_id = $_GET['reservation_id'];
-$tip_amount_input = isset($_GET['tip_amount']) ? max(0, floatval($_GET['tip_amount'])) : 0;
+// Strict validation: tip_percentage must be between 0 and 10, never exceed 10
+$tip_percentage_input = isset($_GET['tip_percentage']) ? max(0, min(10, floatval($_GET['tip_percentage']))) : 0;
 $room_service_fee = isset($_GET['room_service_fee']) ? max(0, floatval($_GET['room_service_fee'])) : 0;
 $delivery_fee = isset($_GET['delivery_fee']) ? max(0, floatval($_GET['delivery_fee'])) : 0;
 $tax_rate = 0.18;
@@ -100,8 +101,10 @@ $creditors_result = mysqli_query($link, $creditors_query);
                     <hr>
                     <?php
                         $tax_amount = $cart_total * $tax_rate;
-                        $max_tip = $cart_total * 0.10;
-                        $tip_amount = min($tip_amount_input, $max_tip);
+                        // ALWAYS calculate tip_amount from tip_percentage * cart_total
+                        // Formula: tip_amount = (tip_percentage / 100) * cart_total
+                        // tip_percentage is already validated to be between 0 and 10
+                        $tip_amount = ($tip_percentage_input / 100) * $cart_total;
                         $GRANDTOTAL = $cart_total + $tax_amount + $tip_amount + $room_service_fee + $delivery_fee;
                     ?>
                     <div class="text-right">
@@ -151,8 +154,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pay_done'])) {
 
     if ($link->query($updateQuery) === TRUE) {
         $tax_amount = $cart_total * $tax_rate;
-        $max_tip = $cart_total * 0.10;
-        $tip_amount = min($tip_amount_input, $max_tip);
+        // ALWAYS calculate tip_amount from tip_percentage * cart_total
+        // Formula: tip_amount = (tip_percentage / 100) * cart_total
+        // Never accept tip_amount directly - always calculate from percentage
+        $tip_amount = ($tip_percentage_input / 100) * $cart_total;
         $GRANDTOTAL = $cart_total + $tax_amount + $tip_amount + $room_service_fee + $delivery_fee;
         // Update the creditor's due amount
         $updateCreditorQuery = "UPDATE creditors SET Due_Amount = Due_Amount + $GRANDTOTAL WHERE ID = $creditor_id;";

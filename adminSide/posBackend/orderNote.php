@@ -13,7 +13,8 @@ if (!isset($_GET['bill_id'])) {
 $bill_id = mysqli_real_escape_string($link, $_GET['bill_id']);
 
 // Get delivery, room service, and tip from URL parameters
-$tip_amount_input = isset($_GET['tip_amount']) ? max(0, floatval($_GET['tip_amount'])) : 0;
+// Strict validation: tip_percentage must be between 0 and 10, never exceed 10
+$tip_percentage_input = isset($_GET['tip_percentage']) ? max(0, min(10, floatval($_GET['tip_percentage']))) : 0;
 $room_service_fee = isset($_GET['room_service_fee']) ? floatval($_GET['room_service_fee']) : 0;
 $delivery_fee = isset($_GET['delivery_fee']) ? floatval($_GET['delivery_fee']) : 0;
 
@@ -117,9 +118,10 @@ $pdf->SetFont('Arial', 'B', 8);
 
 $tax_rate = 0.18;
 $tax_amount = $cart_total * $tax_rate;
-// Use manually entered tip amount, cap it at 10% of cart total
-$max_tip = $cart_total * 0.10;
-$tip_amount = min($tip_amount_input, $max_tip);
+// ALWAYS calculate tip_amount from tip_percentage * cart_total
+// Formula: tip_amount = (tip_percentage / 100) * cart_total
+// Never accept tip_amount directly - always calculate from percentage
+$tip_amount = ($tip_percentage_input / 100) * $cart_total;
 $room_fee = $room_service_fee;
 $delivery_fee_total = $delivery_fee;
 $estimated_total = $cart_total + $tax_amount + $tip_amount + $room_fee + $delivery_fee_total;

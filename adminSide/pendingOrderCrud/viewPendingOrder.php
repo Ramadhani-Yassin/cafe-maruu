@@ -351,9 +351,10 @@ if (isset($_POST['pay_bill'])) {
                     <h5 class="mb-3">Optional Charges</h5>
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="tipAmount">Tip (Max 10%)</label>
-                            <input type="number" min="0" max="<?= $cart_total * 0.10 ?>" step="0.01" id="tipAmount" class="form-control" placeholder="0.00" value="0" oninput="validateTip()">
-                            <small class="text-danger" id="tipError" style="display:none;">Max: TZS <?= number_format($cart_total * 0.10, 2) ?></small>
+                            <label for="tipPercentage">Tip (%)</label>
+                            <input type="number" min="0" max="10" step="0.01" id="tipPercentage" class="form-control" placeholder="0.00" value="0" oninput="validateTip()">
+                            <small class="text-danger" id="tipError" style="display:none;">Maximum tip is 10%</small>
+                            <small class="text-muted" id="tipAmountDisplay">Tip Amount: TZS 0.00</small>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="roomServiceAmount">Room Services (TZS)</label>
@@ -368,17 +369,55 @@ if (isset($_POST['pay_bill'])) {
                 </div>
 
                 <script>
+                const cartTotal = <?= $cart_total ?>;
+                
                 function validateTip() {
-                    const tipInput = document.getElementById('tipAmount');
+                    const tipInput = document.getElementById('tipPercentage');
                     const tipError = document.getElementById('tipError');
-                    const maxTip = <?= $cart_total * 0.10 ?>;
+                    const tipAmountDisplay = document.getElementById('tipAmountDisplay');
+                    let tipPercentage = parseFloat(tipInput.value) || 0;
                     
-                    if (parseFloat(tipInput.value) > maxTip) {
-                        tipInput.value = maxTip.toFixed(2);
+                    // Strict validation: deny values > 10
+                    if (tipPercentage > 10) {
+                        tipInput.value = 10;
+                        tipPercentage = 10;
                         tipError.style.display = 'block';
-                        setTimeout(() => { tipError.style.display = 'none'; }, 3000);
+                        tipError.textContent = 'Maximum tip is 10%. Value has been capped at 10%.';
+                        setTimeout(() => { tipError.style.display = 'none'; }, 5000);
+                        return false;
                     }
+                    
+                    if (tipPercentage < 0) {
+                        tipInput.value = 0;
+                        tipPercentage = 0;
+                        return false;
+                    }
+                    
+                    tipError.style.display = 'none';
+                    // Calculate tip amount: tip_percentage * cart_total / 100
+                    const tipAmount = (tipPercentage / 100) * cartTotal;
+                    tipAmountDisplay.textContent = 'Tip Amount: TZS ' + tipAmount.toFixed(2);
+                    return true;
                 }
+                
+                // Prevent typing values > 10
+                document.getElementById('tipPercentage').addEventListener('input', function(e) {
+                    const value = parseFloat(this.value);
+                    if (value > 10) {
+                        this.value = 10;
+                        validateTip();
+                    } else {
+                        validateTip();
+                    }
+                });
+                
+                // Validate on blur as well
+                document.getElementById('tipPercentage').addEventListener('blur', function(e) {
+                    validateTip();
+                });
+                
+                // Initialize tip amount display
+                validateTip();
                 </script>
 
                 <!-- Pay Bill Button and Payment Options -->
@@ -454,14 +493,31 @@ if (isset($_POST['pay_bill'])) {
     };
 
     function launchPayment(type) {
-        const tipInput = document.getElementById('tipAmount');
+        const tipInput = document.getElementById('tipPercentage');
         const roomInput = document.getElementById('roomServiceAmount');
         const deliveryInput = document.getElementById('deliveryAmount');
-        const tipValue = parseFloat(tipInput.value) || 0;
+        let tipPercentage = parseFloat(tipInput.value) || 0;
         const roomValue = parseFloat(roomInput.value) || 0;
         const deliveryValue = parseFloat(deliveryInput.value) || 0;
 
-        if (tipValue < 0 || roomValue < 0 || deliveryValue < 0) {
+        // Strict validation: deny process if tip > 10%
+        if (tipPercentage > 10) {
+            alert('Tip percentage cannot exceed 10%. Please enter a value between 0% and 10%.');
+            tipInput.focus();
+            tipInput.value = 10;
+            validateTip();
+            return;
+        }
+
+        if (tipPercentage < 0) {
+            alert('Tip percentage cannot be negative.');
+            tipInput.focus();
+            tipInput.value = 0;
+            validateTip();
+            return;
+        }
+
+        if (roomValue < 0 || deliveryValue < 0) {
             alert('Additional charges cannot be negative.');
             return;
         }
@@ -470,6 +526,9 @@ if (isset($_POST['pay_bill'])) {
             alert('Please close this pending order to generate a bill before proceeding to payment.');
             return;
         }
+
+        // Ensure tip percentage is capped at 10
+        tipPercentage = Math.min(10, Math.max(0, tipPercentage));
 
         const endpoint = endpoints[type];
         if (!endpoint) {
@@ -482,7 +541,7 @@ if (isset($_POST['pay_bill'])) {
             staff_id: paymentContext.staffId,
             member_id: paymentContext.memberId,
             reservation_id: paymentContext.reservationId,
-            tip_amount: tipValue.toFixed(2),
+            tip_percentage: tipPercentage.toFixed(2),
             room_service_fee: roomValue.toFixed(2),
             delivery_fee: deliveryValue.toFixed(2)
         });
@@ -491,14 +550,31 @@ if (isset($_POST['pay_bill'])) {
     }
 
     function launchOrderNote() {
-        const tipInput = document.getElementById('tipAmount');
+        const tipInput = document.getElementById('tipPercentage');
         const roomInput = document.getElementById('roomServiceAmount');
         const deliveryInput = document.getElementById('deliveryAmount');
-        const tipValue = parseFloat(tipInput.value) || 0;
+        let tipPercentage = parseFloat(tipInput.value) || 0;
         const roomValue = parseFloat(roomInput.value) || 0;
         const deliveryValue = parseFloat(deliveryInput.value) || 0;
 
-        if (tipValue < 0 || roomValue < 0 || deliveryValue < 0) {
+        // Strict validation: deny process if tip > 10%
+        if (tipPercentage > 10) {
+            alert('Tip percentage cannot exceed 10%. Please enter a value between 0% and 10%.');
+            tipInput.focus();
+            tipInput.value = 10;
+            validateTip();
+            return;
+        }
+
+        if (tipPercentage < 0) {
+            alert('Tip percentage cannot be negative.');
+            tipInput.focus();
+            tipInput.value = 0;
+            validateTip();
+            return;
+        }
+
+        if (roomValue < 0 || deliveryValue < 0) {
             alert('Additional charges cannot be negative.');
             return;
         }
@@ -508,9 +584,12 @@ if (isset($_POST['pay_bill'])) {
             return;
         }
 
+        // Ensure tip percentage is capped at 10
+        tipPercentage = Math.min(10, Math.max(0, tipPercentage));
+
         const params = new URLSearchParams({
             bill_id: paymentContext.billId,
-            tip_amount: tipValue.toFixed(2),
+            tip_percentage: tipPercentage.toFixed(2),
             room_service_fee: roomValue.toFixed(2),
             delivery_fee: deliveryValue.toFixed(2)
         });
