@@ -26,7 +26,7 @@
 
     <!-- Category Selector (Optional) -->
     <select style="text-align:center;" id="menu-category" class="menu-category">
-       <!--<option value="blue">Welcome to Café Maruu's Menu</option>-->
+       <!--<option value="blue">Welcome to Migude Restaurant's Menu</option>-->
       <option value="yellow">MAIN DISHES</option>
       <!-- Comment out Side Dishes and Drinks options -->
       <!-- <option value="red">SIDE DISHES</option> -->
@@ -132,10 +132,10 @@
   <div class="about container">
     <div class="col-right">
         <h1 class="section-title" >About <span>Us</span></h1>
-        <h2>Welcome to Café Maruu</h2>
- <p>Welcome to Café Maruu, nestled in the heart of Marumbi, Zanzibar—a true paradise for food lovers and coffee enthusiasts! Located along the serene coastline, our café offers a perfect blend of exquisite flavors, soothing ambiance, and the unparalleled beauty of Zanzibar. Whether you're seeking a place to relax with a cup of freshly brewed coffee or indulge in mouthwatering meals, Café Maruu promises an unforgettable experience.
+        <h2>Welcome to Migude Restaurant</h2>
+ <p>Welcome to Migude Restaurant, nestled in the heart of Marumbi, Zanzibar—a true paradise for food lovers and coffee enthusiasts! Located along the serene coastline, our restaurant offers a perfect blend of exquisite flavors, soothing ambiance, and the unparalleled beauty of Zanzibar. Whether you're seeking a place to relax with a cup of freshly brewed coffee or indulge in mouthwatering meals, Migude Restaurant promises an unforgettable experience.
  </p>
- <p>At Café Maruu, we take pride in offering premium services to ensure every visit is memorable. Savor the rich aroma and bold flavors of our handpicked coffee blends. Every cup is crafted with love, offering the perfect balance of freshness and taste to delight your senses.
+ <p>At Migude Restaurant, we take pride in offering premium services to ensure every visit is memorable. Savor the rich aroma and bold flavors of our handpicked coffee blends. Every cup is crafted with love, offering the perfect balance of freshness and taste to delight your senses.
  </p>
  <p>Enjoy a menu that celebrates both local and international cuisine, with dishes crafted to perfection using the freshest ingredients Zanzibar has to offer. From tantalizing seafood platters to hearty breakfasts, we cater to all tastes. Step into a cozy, tranquil atmosphere where the sound of the waves complements every bite and sip.
  </p>
@@ -167,7 +167,7 @@
         <div class="contact-info">
           <div class='icon'><img src="../image/icons8-email-100.png" alt=""/></div>
           <h1>Email</h1>
-          <h2>cafemaruu@gmail.com</h2> 
+          <h2>migude@gmail.com</h2> 
         </div>
       </div>
       
