@@ -16,7 +16,7 @@ $pdf->AddPage();
 $pdf->SetFont('Arial', 'B', 16);
 
 // Header
-$pdf->Cell(0, 10, "Migude Restaurant - Stock Report", 0, 1, 'C');
+$pdf->Cell(0, 10, "Darajani Motel - Stock Report", 0, 1, 'C');
 $pdf->SetFont('Arial', '', 12);
 $pdf->Cell(0, 10, 'Generated on: ' . date('Y-m-d H:i:s'), 0, 1, 'L');
 $pdf->Ln();

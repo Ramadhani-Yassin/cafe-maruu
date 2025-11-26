@@ -97,7 +97,7 @@ if (!empty($bill_data['bill_time'])) {
 
 // Restaurant Header
 $pdf->SetFont('Arial', 'B', 9);
-$pdf->Cell(0, 4, "Migude Restaurant", 0, 1, 'C');
+$pdf->Cell(0, 4, "Darajani Motel", 0, 1, 'C');
 $pdf->SetFont('Arial', '', 7);
 
 // Receipt Info
@@ -189,7 +189,7 @@ if ($bill_data['payment_method'] !== 'compo') {
     $pdf->Cell(15, 5, number_format($tax_amount, 0), 0, 0, 'R');
     $pdf->Ln();
 
-    $pdf->Cell(57, 5, 'TIP (10%):', 0);
+    $pdf->Cell(57, 5, 'TIP:', 0);
     $pdf->Cell(15, 5, number_format($tip_amount, 0), 0, 0, 'R');
     $pdf->Ln();
 

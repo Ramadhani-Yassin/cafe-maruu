@@ -7,10 +7,10 @@ $bill_id = $_GET['bill_id'];
 $staff_id = $_GET['staff_id'];
 $member_id = intval($_GET['member_id']);
 $reservation_id = $_GET['reservation_id'];
+$tip_amount_input = isset($_GET['tip_amount']) ? max(0, floatval($_GET['tip_amount'])) : 0;
 $room_service_fee = isset($_GET['room_service_fee']) ? max(0, floatval($_GET['room_service_fee'])) : 0;
 $delivery_fee = isset($_GET['delivery_fee']) ? max(0, floatval($_GET['delivery_fee'])) : 0;
 $tax_rate = 0.18;
-$tip_rate = 0.10;
 
 // Fetch creditors from the database
 $creditors_query = "SELECT ID, Name FROM creditors";
@@ -100,7 +100,8 @@ $creditors_result = mysqli_query($link, $creditors_query);
                     <hr>
                     <?php
                         $tax_amount = $cart_total * $tax_rate;
-                        $tip_amount = $cart_total * $tip_rate;
+                        $max_tip = $cart_total * 0.10;
+                        $tip_amount = min($tip_amount_input, $max_tip);
                         $GRANDTOTAL = $cart_total + $tax_amount + $tip_amount + $room_service_fee + $delivery_fee;
                     ?>
                     <div class="text-right">
@@ -150,7 +151,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pay_done'])) {
 
     if ($link->query($updateQuery) === TRUE) {
         $tax_amount = $cart_total * $tax_rate;
-        $tip_amount = $cart_total * $tip_rate;
+        $max_tip = $cart_total * 0.10;
+        $tip_amount = min($tip_amount_input, $max_tip);
         $GRANDTOTAL = $cart_total + $tax_amount + $tip_amount + $room_service_fee + $delivery_fee;
         // Update the creditor's due amount
         $updateCreditorQuery = "UPDATE creditors SET Due_Amount = Due_Amount + $GRANDTOTAL WHERE ID = $creditor_id;";

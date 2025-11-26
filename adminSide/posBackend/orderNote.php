@@ -12,7 +12,8 @@ if (!isset($_GET['bill_id'])) {
 
 $bill_id = mysqli_real_escape_string($link, $_GET['bill_id']);
 
-// Get delivery and room service fees from URL parameters
+// Get delivery, room service, and tip from URL parameters
+$tip_amount_input = isset($_GET['tip_amount']) ? max(0, floatval($_GET['tip_amount'])) : 0;
 $room_service_fee = isset($_GET['room_service_fee']) ? floatval($_GET['room_service_fee']) : 0;
 $delivery_fee = isset($_GET['delivery_fee']) ? floatval($_GET['delivery_fee']) : 0;
 
@@ -69,7 +70,7 @@ if (!empty($bill_data['bill_time'])) {
 
 // Restaurant Header
 $pdf->SetFont('Arial', 'B', 9);
-$pdf->Cell(0, 4, "Migude Restaurant", 0, 1, 'C');
+$pdf->Cell(0, 4, "Darajani Motel", 0, 1, 'C');
 $pdf->SetFont('Arial', '', 7);
 $pdf->Cell(0, 4, "ORDER NOTE - PREVIEW ONLY", 0, 1, 'C');
 $pdf->Ln(1);
@@ -115,9 +116,10 @@ $pdf->Cell(0, 1, str_repeat('-', 72), 0, 1);
 $pdf->SetFont('Arial', 'B', 8);
 
 $tax_rate = 0.18;
-$tip_rate = 0.10;
 $tax_amount = $cart_total * $tax_rate;
-$tip_amount = $cart_total * $tip_rate;
+// Use manually entered tip amount, cap it at 10% of cart total
+$max_tip = $cart_total * 0.10;
+$tip_amount = min($tip_amount_input, $max_tip);
 $room_fee = $room_service_fee;
 $delivery_fee_total = $delivery_fee;
 $estimated_total = $cart_total + $tax_amount + $tip_amount + $room_fee + $delivery_fee_total;
@@ -130,7 +132,7 @@ $pdf->Cell(57, 5, 'TAX (18%):', 0);
 $pdf->Cell(15, 5, number_format($tax_amount, 0), 0, 0, 'R');
 $pdf->Ln();
 
-$pdf->Cell(57, 5, 'TIP (10%):', 0);
+$pdf->Cell(57, 5, 'TIP:', 0);
 $pdf->Cell(15, 5, number_format($tip_amount, 0), 0, 0, 'R');
 $pdf->Ln();
 

@@ -7,7 +7,7 @@
      
     <div class="hero container" style="position: relative; z-index: 1;">
         <div>
-            <h1><strong><h1 class="text-center" style="font-family:Copperplate; color:whitesmoke;"> Migude Restaurant</h1><span></span></strong></h1>
+            <h1><strong><h1 class="text-center" style="font-family:Copperplate; color:whitesmoke;"> Darajani Motel</h1><span></span></strong></h1>
             <h1><strong style="color:white;">COFFEE & DINING<span></span></strong></h1>
             <a href="#projects" type="button" class="cta">MENU</a>
         </div>
@@ -26,7 +26,7 @@
 
     <!-- Category Selector (Optional) -->
     <select style="text-align:center;" id="menu-category" class="menu-category">
-       <!--<option value="blue">Welcome to Migude Restaurant's Menu</option>-->
+       <!--<option value="blue">Welcome to Darajani Motel's Menu</option>-->
       <option value="yellow">MAIN DISHES</option>
       <!-- Comment out Side Dishes and Drinks options -->
       <!-- <option value="red">SIDE DISHES</option> -->
@@ -132,10 +132,10 @@
   <div class="about container">
     <div class="col-right">
         <h1 class="section-title" >About <span>Us</span></h1>
-        <h2>Welcome to Migude Restaurant</h2>
- <p>Welcome to Migude Restaurant, nestled in the heart of Marumbi, Zanzibar—a true paradise for food lovers and coffee enthusiasts! Located along the serene coastline, our restaurant offers a perfect blend of exquisite flavors, soothing ambiance, and the unparalleled beauty of Zanzibar. Whether you're seeking a place to relax with a cup of freshly brewed coffee or indulge in mouthwatering meals, Migude Restaurant promises an unforgettable experience.
+        <h2>Welcome to Darajani Motel</h2>
+ <p>Welcome to Darajani Motel, nestled in the heart of Marumbi, Zanzibar—a true paradise for food lovers and coffee enthusiasts! Located along the serene coastline, our motel offers a perfect blend of exquisite flavors, soothing ambiance, and the unparalleled beauty of Zanzibar. Whether you're seeking a place to relax with a cup of freshly brewed coffee or indulge in mouthwatering meals, Darajani Motel promises an unforgettable experience.
  </p>
- <p>At Migude Restaurant, we take pride in offering premium services to ensure every visit is memorable. Savor the rich aroma and bold flavors of our handpicked coffee blends. Every cup is crafted with love, offering the perfect balance of freshness and taste to delight your senses.
+ <p>At Darajani Motel, we take pride in offering premium services to ensure every visit is memorable. Savor the rich aroma and bold flavors of our handpicked coffee blends. Every cup is crafted with love, offering the perfect balance of freshness and taste to delight your senses.
  </p>
  <p>Enjoy a menu that celebrates both local and international cuisine, with dishes crafted to perfection using the freshest ingredients Zanzibar has to offer. From tantalizing seafood platters to hearty breakfasts, we cater to all tastes. Step into a cozy, tranquil atmosphere where the sound of the waves complements every bite and sip.
  </p>

@@ -77,7 +77,7 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand-lg navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3 glow-brand" href="../posBackend/orderItem.php">Migude Restaurant Staff Panel</a>
+            <a class="navbar-brand ps-3 glow-brand" href="../posBackend/orderItem.php">Darajani Motel Staff Panel</a>
             <!-- Single Toggle aligned right on small screens -->
             <button class="btn btn-link btn-sm ms-auto me-2 d-lg-none mobile-nav-toggle" id="sidebarToggle" href="#!" aria-label="Toggle sidebar"><i class="fas fa-bars"></i></button>
             

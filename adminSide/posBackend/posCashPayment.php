@@ -7,11 +7,11 @@ $bill_id = $_GET['bill_id'];
 $staff_id = $_GET['staff_id'];
 $member_id = intval($_GET['member_id']);
 $reservation_id = $_GET['reservation_id'];
+$tip_amount_input = isset($_GET['tip_amount']) ? max(0, floatval($_GET['tip_amount'])) : 0;
 $room_service_fee = isset($_GET['room_service_fee']) ? max(0, floatval($_GET['room_service_fee'])) : 0;
 $delivery_fee = isset($_GET['delivery_fee']) ? max(0, floatval($_GET['delivery_fee'])) : 0;
 
 $tax_rate = 0.18;
-$tip_rate = 0.10;
 ?>
 
 <!-- Add custom CSS for top margin and padding -->
@@ -97,14 +97,16 @@ $tip_rate = 0.10;
                     <hr>
                     <?php
                         $tax_amount = $cart_total * $tax_rate;
-                        $tip_amount = $cart_total * $tip_rate;
+                        // Use manually entered tip amount, cap it at 10% of cart total
+                        $max_tip = $cart_total * 0.10;
+                        $tip_amount = min($tip_amount_input, $max_tip);
                         $GRANDTOTAL = $cart_total + $tax_amount + $tip_amount + $room_service_fee + $delivery_fee;
                     ?>
                     <div class="text-right">
                         <?php 
                         echo "<strong>Subtotal:</strong> TZS " . number_format($cart_total, 2) . "<br>";
                         echo "<strong>Tax (18%):</strong> TZS " . number_format($tax_amount, 2) . "<br>";
-                        echo "<strong>Tip (10%):</strong> TZS " . number_format($tip_amount, 2) . "<br>";
+                        echo "<strong>Tip:</strong> TZS " . number_format($tip_amount, 2) . "<br>";
                         echo "<strong>Room Services:</strong> TZS " . number_format($room_service_fee, 2) . "<br>";
                         echo "<strong>Delivery Service:</strong> TZS " . number_format($delivery_fee, 2) . "<br>";
                         echo "<strong>Grand Total:</strong> TZS " . number_format($GRANDTOTAL, 2);
@@ -124,6 +126,7 @@ $tip_rate = 0.10;
                             <input type="hidden" name="member_id" value="<?php echo $member_id; ?>">
                             <input type="hidden" name="reservation_id" value="<?php echo $reservation_id; ?>">
                             <input type="hidden" name="GRANDTOTAL" value="<?php echo $GRANDTOTAL; ?>">
+                            <input type="hidden" name="tip_amount" value="<?php echo $tip_amount; ?>">
                             <input type="hidden" name="room_service_fee" value="<?php echo $room_service_fee; ?>">
                             <input type="hidden" name="delivery_fee" value="<?php echo $delivery_fee; ?>">
 
@@ -136,6 +139,7 @@ $tip_rate = 0.10;
 
             <?php
             if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['pay'])) {
+                $tip_amount_post = isset($_POST['tip_amount']) ? max(0, floatval($_POST['tip_amount'])) : 0;
                 $room_service_fee = isset($_POST['room_service_fee']) ? max(0, floatval($_POST['room_service_fee'])) : $room_service_fee;
                 $delivery_fee = isset($_POST['delivery_fee']) ? max(0, floatval($_POST['delivery_fee'])) : $delivery_fee;
                 // Check if the bill has already been paid
@@ -161,7 +165,9 @@ $tip_rate = 0.10;
                                 WHERE bill_id = $bill_id;";
 
                 $tax_amount = $cart_total * $tax_rate;
-                $tip_amount = $cart_total * $tip_rate;
+                // Use the tip amount from POST (already validated and capped)
+                $max_tip = $cart_total * 0.10;
+                $tip_amount = min($tip_amount_post, $max_tip);
                 $GRANDTOTAL = $cart_total + $tax_amount + $tip_amount + $room_service_fee + $delivery_fee;
                 $points = intval($GRANDTOTAL);
                 if ($link->query($updateQuery) === TRUE) {

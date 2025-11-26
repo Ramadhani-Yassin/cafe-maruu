@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addToCart'])) {
                 if ($unit === 'base') {
                     if ($quantity > $base_quantity) {
                         echo "<script>
-                        alert('Not enough Items available on Migude Restaurant Stock ⚠️‼️.');
+                        alert('Not enough Items available on Darajani Motel Stock ⚠️‼️.');
                         window.location.href = 'orderItem.php'; // Redirect to cart page instead of going back
                       </script>";
                         exit();
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['addToCart'])) {
                 elseif ($unit === 'aggregate') {
                     if ($quantity > $aggregate_quantity) {
                         echo "<script>
-                        alert('Not enough Items available on Migude Restaurant Stock ⚠️‼️.');
+                        alert('Not enough Items available on Darajani Motel Stock ⚠️‼️.');
                         window.location.href = 'orderItem.php'; // Redirect to cart page instead of going back
                       </script>";
                         exit();

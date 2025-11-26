@@ -341,10 +341,6 @@ if (isset($_POST['pay_bill'])) {
                             <td>TZS <?= number_format($cart_total, 2) ?></td>
                         </tr>
                         <tr>
-                            <th>Tip (10% auto)</th>
-                            <td>TZS <?= number_format($cart_total * 0.10, 2) ?></td>
-                        </tr>
-                        <tr>
                             <th>Tax (18% auto)</th>
                             <td>TZS <?= number_format($cart_total * 0.18, 2) ?></td>
                         </tr>
@@ -354,17 +350,36 @@ if (isset($_POST['pay_bill'])) {
                 <div class="addon-card mt-3">
                     <h5 class="mb-3">Optional Charges</h5>
                     <div class="form-row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
+                            <label for="tipAmount">Tip (Max 10%)</label>
+                            <input type="number" min="0" max="<?= $cart_total * 0.10 ?>" step="0.01" id="tipAmount" class="form-control" placeholder="0.00" value="0" oninput="validateTip()">
+                            <small class="text-danger" id="tipError" style="display:none;">Max: TZS <?= number_format($cart_total * 0.10, 2) ?></small>
+                        </div>
+                        <div class="form-group col-md-4">
                             <label for="roomServiceAmount">Room Services (TZS)</label>
                             <input type="number" min="0" step="0.01" id="roomServiceAmount" class="form-control" placeholder="0.00" value="0">
                         </div>
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-4">
                             <label for="deliveryAmount">Delivery Service (TZS)</label>
                             <input type="number" min="0" step="0.01" id="deliveryAmount" class="form-control" placeholder="0.00" value="0">
                         </div>
                     </div>
-                    <small class="text-muted d-block">Tip (10%) and Tax (18%) are added automatically to every receipt.</small>
+                    <small class="text-muted d-block">Tax (18%) is added automatically. Tip is optional (max 10% of cart total).</small>
                 </div>
+
+                <script>
+                function validateTip() {
+                    const tipInput = document.getElementById('tipAmount');
+                    const tipError = document.getElementById('tipError');
+                    const maxTip = <?= $cart_total * 0.10 ?>;
+                    
+                    if (parseFloat(tipInput.value) > maxTip) {
+                        tipInput.value = maxTip.toFixed(2);
+                        tipError.style.display = 'block';
+                        setTimeout(() => { tipError.style.display = 'none'; }, 3000);
+                    }
+                }
+                </script>
 
                 <!-- Pay Bill Button and Payment Options -->
                 <?php if (!$has_payment_time && mysqli_num_rows($items_result) > 0): ?>
@@ -439,12 +454,14 @@ if (isset($_POST['pay_bill'])) {
     };
 
     function launchPayment(type) {
+        const tipInput = document.getElementById('tipAmount');
         const roomInput = document.getElementById('roomServiceAmount');
         const deliveryInput = document.getElementById('deliveryAmount');
+        const tipValue = parseFloat(tipInput.value) || 0;
         const roomValue = parseFloat(roomInput.value) || 0;
         const deliveryValue = parseFloat(deliveryInput.value) || 0;
 
-        if (roomValue < 0 || deliveryValue < 0) {
+        if (tipValue < 0 || roomValue < 0 || deliveryValue < 0) {
             alert('Additional charges cannot be negative.');
             return;
         }
@@ -465,6 +482,7 @@ if (isset($_POST['pay_bill'])) {
             staff_id: paymentContext.staffId,
             member_id: paymentContext.memberId,
             reservation_id: paymentContext.reservationId,
+            tip_amount: tipValue.toFixed(2),
             room_service_fee: roomValue.toFixed(2),
             delivery_fee: deliveryValue.toFixed(2)
         });
@@ -473,12 +491,14 @@ if (isset($_POST['pay_bill'])) {
     }
 
     function launchOrderNote() {
+        const tipInput = document.getElementById('tipAmount');
         const roomInput = document.getElementById('roomServiceAmount');
         const deliveryInput = document.getElementById('deliveryAmount');
+        const tipValue = parseFloat(tipInput.value) || 0;
         const roomValue = parseFloat(roomInput.value) || 0;
         const deliveryValue = parseFloat(deliveryInput.value) || 0;
 
-        if (roomValue < 0 || deliveryValue < 0) {
+        if (tipValue < 0 || roomValue < 0 || deliveryValue < 0) {
             alert('Additional charges cannot be negative.');
             return;
         }
@@ -490,6 +510,7 @@ if (isset($_POST['pay_bill'])) {
 
         const params = new URLSearchParams({
             bill_id: paymentContext.billId,
+            tip_amount: tipValue.toFixed(2),
             room_service_fee: roomValue.toFixed(2),
             delivery_fee: deliveryValue.toFixed(2)
         });

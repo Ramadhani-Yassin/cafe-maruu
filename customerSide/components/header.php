@@ -87,7 +87,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
             <div class="nav-bar">
                 <div class="brand">
                     <a class="nav-link" href="../home/home.php#hero">
-                        <h1 class="text-center" style="font-family:Copperplate; color:whitesmoke;"> Migude Restaurant</h1><span
+                        <h1 class="text-center" style="font-family:Copperplate; color:whitesmoke;"> Darajani Motel</h1><span
                             class="sr-only"></span>
                     </a>
                 </div>

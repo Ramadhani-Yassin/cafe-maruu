@@ -24,7 +24,7 @@
           
         
       </div>
-      <p>© <?= date('Y') ?> Migude Restaurant Dining & Bar</p>
+      <p>© <?= date('Y') ?> Darajani Motel Dining & Bar</p>
       
       
     </div>
